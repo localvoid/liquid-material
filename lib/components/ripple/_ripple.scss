@@ -1,0 +1,31 @@
+.mui-ripple {
+  position: absolute;
+
+  width: 0;
+  height: 0;
+
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  transition: all;
+}
+
+@mixin ripple-animation($animation-name, $ripple-color, $size: 150px) {
+  $color-in: rgba($ripple-color, 1);
+  $color-out: rgba($ripple-color, 0);
+
+  @-webkit-keyframes $animation-name {
+    0% { background-color: $color-out; };
+    50% { background-color: $color-in; };
+    100% {
+      width: $size;
+      height: $size;
+      background-color: $color-out;
+    };
+  }
+}
+
+@include ripple-animation(ripple-default-animation,
+                          darken($paper-button-default-color, 20%));
+
+@include ripple-animation(ripple-primary-animation,
+                          darken($paper-button-primary-color, 20%));
