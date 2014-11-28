@@ -2,132 +2,155 @@ library liquid_material.button;
 
 import 'dart:html' as html;
 import 'package:vdom/vdom.dart' as vdom;
+import 'package:liquid/liquid.dart';
 import 'package:liquid_material/components/paper/paper.dart';
 import 'package:liquid_material/components/ripple/ripple.dart';
 
 class Button extends Paper {
   Ripple _ripple;
   html.DivElement content;
-  bool disabled;
 
-  html.Element get container => content;
+  bool _oldDisabled;
+  bool _disabled;
 
-  Button(Object key,
-      List<vdom.Node> children,
-      {this.disabled: false,
-       int depth: 1,
-       Map<String, String> attributes: null,
-       List<String> classes: null,
-       Map<String, String> styles: null})
-       : super(key, children,
-           depth: depth,
-           attributes: attributes,
-           classes: classes,
-           styles: styles);
+  bool get disabled => _disabled;
 
-  void render(vdom.Context context) {
-    _ripple = new Ripple(0);
-    _ripple.create(context);
-    _ripple.render(context);
+  void set disabled(bool newDisabled) {
+    if (_disabled != newDisabled) {
+      _disabled = newDisabled;
+      invalidate();
+    }
+  }
+
+  html.DivElement get container => content;
+
+  Button(Context context,
+      {bool disabled: false,
+       int zDepth: 1})
+      : _oldDisabled = disabled,
+      _disabled = disabled,
+      super(context, zDepth) {
+    _ripple = new Ripple(this);
+
+    element.classes.add('mui-paper-button');
+    if (_disabled != null && _disabled) {
+      element.classes.add('mui-disabled');
+    }
+
     content = new html.DivElement()
       ..classes.add('mui-paper-button-content');
 
-    super.render(context);
-    final html.DivElement e = ref;
-    e.classes
-      ..add('mui-paper-button');
-    if (disabled) {
-      e.classes.add('mui-disabled');
-    }
-
     inner
-      ..append(_ripple.ref)
+      ..append(_ripple.element)
       ..append(content);
 
-    e.onMouseDown.listen(_handleMouseDown);
+    element.onMouseDown.listen(handleMouseDown);
   }
 
-  void update(Button other, vdom.Context context) {
-    super.update(other, context);
-    other._ripple = _ripple;
-    other.content = content;
-    final html.DivElement e = ref;
-    if (disabled != other.disabled) {
-      if (disabled) {
-        e.classes.remove('mui-disabled');
+  void update() {
+    super.update();
+    updateDisabled(_disabled);
+  }
+
+  void updateDisabled(bool newDisabled) {
+    if (_oldDisabled != newDisabled) {
+      if (_oldDisabled) {
+        element.classes.remove('mui-disabled');
       } else {
-        e.classes.add('mui-disabled');
+        element.classes.add('mui-disabled');
       }
+      _oldDisabled = newDisabled;
+      _disabled = newDisabled;
     }
   }
 
-  void _handleMouseDown(html.MouseEvent ev) {
-    final e = ref;
-    var x = ev.offset.x / e.clientWidth;
-    var y = ev.offset.y / e.clientHeight;
+  void updateProperties(bool newDisabled) {
+    if (newDisabled != null) {
+      updateDisabled(newDisabled);
+    }
+  }
+
+  void handleMouseDown(html.MouseEvent ev) {
+    var x = ev.offset.x / element.clientWidth;
+    var y = ev.offset.y / element.clientHeight;
     _ripple.animate(x, y);
   }
 }
 
 class FlatButton extends Button {
-  FlatButton(Object key,
-      List<vdom.Node> children,
-      {bool disabled: false,
-       Map<String, String> attributes: null,
-       List<String> classes: null,
-       Map<String, String> styles: null})
-       : super(key, children,
-           disabled: disabled,
-           depth: 0,
-           attributes: attributes,
-           classes: classes,
-           styles: styles);
-
-  void create(vdom.Context context) {
-    super.create(context);
-    (ref as html.DivElement).classes.add('mui-flat');
+  FlatButton(Context context, {bool disabled: false})
+       : super(context, disabled: disabled, zDepth: 0) {
+    element.classes.add('mui-flat');
   }
 }
 
 class RaisedButton extends Button {
+  bool _mouseDown = false;
   bool _raising = false;
 
-  RaisedButton(Object key,
-      List<vdom.Node> children,
-      {bool disabled: false,
-       Map<String, String> attributes: null,
-       List<String> classes: null,
-       Map<String, String> styles: null})
-       : super(key, children,
-           disabled: disabled,
-           depth: 1,
-           attributes: attributes,
-           classes: classes,
-           styles: styles);
-
-  void create(vdom.Context context) {
-    super.create(context);
-    (ref as html.DivElement)
-        ..classes.add('mui-flat')
-        ..onTransitionEnd.listen(_handleTransitionEnd);
+  RaisedButton(Context context, {bool disabled: false})
+       : super(context, disabled: disabled, zDepth: 1) {
+    element.classes.add('mui-raised');
+    element.onTransitionEnd.listen(_handleTransitionEnd);
   }
 
-  void _handleMouseDown(html.MouseEvent ev) {
-    super._handleMouseDown(ev);
-    if (!_raising) {
-      _raising = true;
-      final html.DivElement e = ref;
-      e.classes.remove('mui-z-depth-$depth');
-      e.classes.add('mui-z-depth-${depth+1}');
+  void handleMouseDown(html.MouseEvent e) {
+    super.handleMouseDown(e);
+    if (!_mouseDown) {
+      zDepth += 1;
+      _mouseDown = true;
     }
   }
 
   void _handleTransitionEnd(html.TransitionEvent ev) {
-    if (_raising) {
-      final html.DivElement e = ref;
-      e.classes.remove('mui-z-depth-${depth+1}');
-      e.classes.add('mui-z-depth-$depth');
-      _raising = false;
+    if (_mouseDown) {
+      zDepth -= 1;
+      _mouseDown = false;
     }
+  }
+}
+
+class VFlatButton extends VComponentContainer<FlatButton, html.DivElement> {
+  bool disabled;
+
+  VFlatButton(Object key,
+      List<vdom.Node> children,
+      {this.disabled: null,
+       Map<String, String> attributes: null,
+       List<String> classes: null,
+       Map<String, String> styles: null})
+    : super(key, children, attributes, classes, styles);
+
+  void create(Context context) {
+    component = new FlatButton(context, disabled: disabled);
+    ref = component.element;
+  }
+
+  void update(VFlatButton other, Context context) {
+    super.update(other, context);
+    component.updateProperties(other.disabled);
+  }
+}
+
+
+class VRaisedButton extends VComponentContainer<RaisedButton, html.DivElement> {
+  bool disabled;
+
+  VRaisedButton(Object key,
+      List<vdom.Node> children,
+      {this.disabled: null,
+       Map<String, String> attributes: null,
+       List<String> classes: null,
+       Map<String, String> styles: null})
+    : super(key, children, attributes, classes, styles);
+
+  void create(Context context) {
+    component = new RaisedButton(context, disabled: disabled);
+    ref = component.element;
+  }
+
+  void update(VRaisedButton other, Context context) {
+    super.update(other, context);
+    component.updateProperties(other.disabled);
   }
 }

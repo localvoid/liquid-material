@@ -1,48 +1,32 @@
 library liquid_material.ripple;
 
 import 'dart:html' as html;
-import 'package:vdom/vdom.dart' as vdom;
+import 'package:liquid/liquid.dart';
 
-class Ripple extends vdom.ElementBase {
+class Ripple extends Component<html.DivElement> {
   bool _active = false;
 
-  Ripple(Object key, {
-    Map<String, String> attributes: null,
-    List<String> classes: null,
-    Map<String, String> styles: null})
-    : super(key, attributes, classes, styles);
-
-  void create(vdom.Context context) {
-    ref = new html.DivElement();
-  }
-
-  void render(vdom.Context context) {
-    (ref as html.DivElement).classes.add('mui-ripple');
-  }
-
-  void update(Ripple other, vdom.Context context) {
-    other._active = _active;
-    super.update(other, context);
+  Ripple(Context context) : super(new html.DivElement(), context) {
+    element.classes.add('mui-ripple');
   }
 
   void animate(num x, num y) {
     if (!_active) {
-      final html.DivElement e = ref;
-      e.style
+      element.style
         ..top = '${y*100}%'
         ..left = '${x*100}%';
 
-      e.classes.add('mui-show');
+      element.classes.add('mui-show');
       _active = true;
-      e.on['animationend'].listen(_handleAnimationEnd);
-    }
-  }
-
-  void _handleAnimationEnd(html.Event e) {
-    if (_active) {
-      final html.DivElement e = ref;
-      e.classes.remove('mui-show');
-      _active = false;
+      var sub;
+      sub = element.onTransitionEnd.listen((e) {
+        if (_active) {
+          element.classes.remove('mui-show');
+          _active = false;
+        }
+        e.stopPropagation();
+        sub.cancel();
+      });
     }
   }
 }

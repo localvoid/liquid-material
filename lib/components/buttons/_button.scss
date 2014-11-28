@@ -4,8 +4,6 @@
   $primary-hover-color: darken($paper-button-primary-color, 10%);
   $primary-flat-hover-color: lighten($paper-button-primary-color, 30%);
 
-  box-sizing: border-box;
-
   margin: 0;
   padding: 0;
   display: inline-block;
@@ -101,9 +99,7 @@
   }
 
   .mui-ripple {
-    &.mui-show {
-      -webkit-animation: ripple-default-animation 0.325s;
-    }
+    background: darken($paper-button-default-color, 20%);
   }
 }
 

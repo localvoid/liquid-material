@@ -3,10 +3,10 @@ library liquid_material.icon;
 import 'dart:html' as html;
 import 'package:vdom/vdom.dart' as vdom;
 
-class Icon extends vdom.ElementBase {
+class VIcon extends vdom.ElementBase {
   String name;
 
-  Icon(Object key,
+  VIcon(Object key,
       this.name,
       {Map<String, String> attributes: null,
        List<String> classes: null,
@@ -23,7 +23,7 @@ class Icon extends vdom.ElementBase {
       ..classes.add(name);
   }
 
-  void update(Icon other, vdom.Context context) {
+  void update(VIcon other, vdom.Context context) {
     super.update(other, context);
     final e = ref;
     if (name != other.name) {

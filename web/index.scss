@@ -2,9 +2,14 @@
 @import 'packages/liquid_material/scss/resets';
 @import 'packages/liquid_material/scss/variables';
 
-html, body {
+html {
+  box-sizing: border-box;
+  font-family: $content-font-family;
   width: 100%;
   height: 100%;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 html {

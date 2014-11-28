@@ -2,8 +2,10 @@ name: liquid_material
 description: Liquid Material Components
 dependencies:
   browser: any
-  liquid: any
+  liquid:
+    git: git://github.com/localvoid/liquid.git
   sass: any
+  route: any
 dependency_overrides:
   liquid:
     path: ../liquid

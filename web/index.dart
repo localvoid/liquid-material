@@ -1,49 +1,44 @@
-import 'dart:html';
-import 'package:vdom/helpers.dart' as vdom;
+import 'dart:html' as html;
+import 'package:route/client.dart';
 import 'package:liquid/liquid.dart';
 import 'package:liquid_material/material.dart' as mui;
+import 'src/pages.dart';
 
-class PaperPage extends VComponent {
-  PaperPage(Context context) : super('div', context) {
-    element.id = 'paper-examples';
+class Application extends mui.AppCanvas {
+  static const int buttonPage = 0;
+
+  int _page = buttonPage;
+  void set page(int newPage) {
+    if (_page != newPage) {
+      _page = newPage;
+      invalidate();
+    }
   }
 
-  build() {
-    final sharpPapers = [];
-    final roundedPapers = [];
-    final circlePapers = [];
-    for (var i = 1; i < 6; i++) {
-      sharpPapers.add(new mui.Paper(i, const [], depth: i));
-      roundedPapers.add(new mui.RoundedPaper(i, const [], depth: i));
-      circlePapers.add(new mui.CirclePaper(i, const [], depth: i));
+  Application(Context context) : super(context);
+
+  VRootElement build() {
+    var p;
+    switch (_page) {
+      case buttonPage:
+        p = new VButtonPage(_page);
+        break;
     }
 
-    return vdom.div(0,
-        [vdom.div(0, sharpPapers, classes: const ['paper-examples-group']),
-         vdom.div(1, roundedPapers, classes: const ['paper-examples-group']),
-         vdom.div(2, circlePapers, classes: const ['paper-examples-group'])]);
+    return new VRootElement([new mui.VAppBar(#appBar, const [], title: 'Components Demo'),
+                             p]);
   }
-
-  static virtual(Object key) {
-    return new VDomComponent(key, (component, context) {
-      if (component == null) {
-        return new PaperPage(context);
-      }
-    });
-  }
-}
-
-class Application extends VComponent {
-  Application(Context context) : super('div', context);
-
-  build() => new mui.AppCanvas(0,
-      [new mui.AppBar(#bar, [], title: 'Material UI'),
-       PaperPage.virtual(0),
-       new mui.FlatButton(0, [vdom.t('Flat Button')]),
-       new mui.RaisedButton(1, [vdom.t('Raised Button')])]);
 }
 
 
 void main() {
-  injectComponent(new Application(null), document.body);
+  final app = new Application(null);
+
+  final router = new Router()
+    ..addHandler(new UrlPattern(r'/'), (_) {
+      app.page = Application.buttonPage;
+    })
+    ..listen();
+
+  injectComponent(app, html.document.body);
 }
