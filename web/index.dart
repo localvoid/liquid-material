@@ -1,42 +1,38 @@
 import 'dart:html' as html;
 import 'package:route/client.dart';
 import 'package:liquid/liquid.dart';
+import 'package:liquid/vdom.dart' as v;
 import 'package:liquid_material/material.dart' as mui;
 import 'src/pages.dart';
 
 class Application extends mui.AppCanvas {
   static const int buttonPage = 0;
 
-  int _page = buttonPage;
-  void set page(int newPage) {
-    if (_page != newPage) {
-      _page = newPage;
-      invalidate();
-    }
-  }
+  @property int page = 0;
 
-  Application(Context context) : super(context);
-
-  VRootElement build() {
-    var p;
-    switch (_page) {
+  v.VRoot build() {
+    var vpage;
+    switch (page) {
       case buttonPage:
-        p = new VButtonPage(_page);
+        vpage = vButtonPage();
         break;
     }
 
-    return new VRootElement([new mui.VAppBar(#appBar, const [], title: 'Components Demo'),
-                             p]);
+    return v.root()([
+      mui.appBar(title: 'Components Demo'),
+      vpage
+    ]);
   }
 }
 
 
 void main() {
-  final app = new Application(null);
+  final app = new Application();
 
   final router = new Router()
     ..addHandler(new UrlPattern(r'/'), (_) {
       app.page = Application.buttonPage;
+      app.invalidate();
     })
     ..listen();
 

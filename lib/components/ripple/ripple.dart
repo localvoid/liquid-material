@@ -6,8 +6,9 @@ import 'package:liquid/liquid.dart';
 class Ripple extends Component<html.DivElement> {
   bool _active = false;
 
-  Ripple(Context context) : super(new html.DivElement(), context) {
-    element.classes.add('mui-ripple');
+  void create() {
+    element = new html.DivElement()
+      ..classes.add('mui-ripple');
   }
 
   void animate(num x, num y) {
