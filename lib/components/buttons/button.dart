@@ -7,14 +7,15 @@ import 'package:liquid_material/components/paper/paper.dart';
 import 'package:liquid_material/components/ripple/ripple.dart';
 
 class Button extends Paper {
-  @property bool disabled = false;
+  @property() bool disabled;
 
   Ripple _ripple;
   html.DivElement content;
 
   html.DivElement get container => content;
 
-  Button({int zDepth: 0}) : super(zDepth: zDepth);
+  Button({this.disabled: false, int zDepth: 0})
+      : super(zDepth: zDepth);
 
   void create() {
     super.create();
@@ -50,6 +51,9 @@ class Button extends Paper {
 
 final flatButton = v.componentFactory(FlatButton);
 class FlatButton extends Button {
+  FlatButton({bool disabled, int zDepth: 1})
+      : super(disabled: disabled, zDepth: zDepth);
+
   void create() {
     super.create();
     element.classes.add('mui-flat');
@@ -61,7 +65,8 @@ class RaisedButton extends Button {
   bool _mouseDown = false;
   bool _raising = false;
 
-  RaisedButton({int zDepth: 1}) : super(zDepth: zDepth);
+  RaisedButton({bool disabled, int zDepth: 1})
+      : super(disabled: disabled, zDepth: zDepth);
 
   void create() {
     super.create();

@@ -7,7 +7,7 @@ import 'package:liquid_material/components/paper/paper.dart';
 
 final appBar = v.componentFactory(AppBar);
 class AppBar extends Paper {
-  @property String title;
+  @property(required: true) String title;
   html.HeadingElement _titleElement;
 
   AppBar({int zDepth: 0}) : super(zDepth: zDepth);

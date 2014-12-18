@@ -13,3 +13,4 @@ dependency_overrides:
     path: ../vdom
 transformers:
 - sass
+- liquid

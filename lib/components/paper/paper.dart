@@ -7,7 +7,7 @@ import 'package:liquid/vdom.dart' as v;
 abstract class Paper extends Component<html.DivElement> {
   html.DivElement inner;
 
-  @property int zDepth;
+  @property() int zDepth;
 
   html.DivElement get container => inner;
 

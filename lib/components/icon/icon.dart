@@ -4,16 +4,17 @@ import 'dart:html' as html;
 import 'package:vdom/vdom.dart' as vdom;
 
 class VIcon extends vdom.VElementBase<html.DivElement> {
-  String name;
+  final String name;
 
   VIcon(
       {Object key,
        this.name: 'default',
        String id,
+       String type,
        Map<String, String> attributes,
        List<String> classes,
        Map<String, String> styles})
-       : super(key, null, id, attributes, classes, styles);
+       : super(key, null, id, type, attributes, classes, styles);
 
   void create(vdom.Context context) {
     ref = new html.DivElement();

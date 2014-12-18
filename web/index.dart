@@ -8,7 +8,7 @@ import 'src/pages.dart';
 class Application extends mui.AppCanvas {
   static const int buttonPage = 0;
 
-  @property int page = 0;
+  @property(required: true) int page = 0;
 
   v.VRoot build() {
     var vpage;
