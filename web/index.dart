@@ -13,7 +13,7 @@ class ApplicationStyleSheet extends css.StyleSheet {
   final require = [mui.MainStyleSheet.instance,
                    mui.AppBar.css];
 
-  final icons = [mui.cloudDone];
+  final icons = [mui.icon3dRotation];
 
   build() => [
       css.rule(['.paper-examples .mui-paper'], [
@@ -37,7 +37,7 @@ class Application extends Component {
   build() {
     return v.root()([
       mui.appBar(title: 'Components Demo'),
-      mui.icon(mui.cloudDone, shapeStyles: {'fill': '#f00'})
+      mui.icon(mui.icon3dRotation, shapeStyles: {'fill': '#f00'})
     ]);
   }
 }

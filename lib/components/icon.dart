@@ -56,6 +56,7 @@ class VIcon extends vdom.VElement<svg.SvgSvgElement> {
       ..classes.add('mui_icon');
 
     shapeRef = new svg.UseElement()
+      ..classes.add('mui_icon_shape')
       ..setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#${icon.id}');
 
     if (shapeStyles != null) {

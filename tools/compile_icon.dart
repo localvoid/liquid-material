@@ -117,16 +117,17 @@ void main(List<String> arguments) {
     final fileName = ospath.basename(iconFile.path);
     final iconName = fileName.substring(3, fileName.length - 9)
         .replaceAllMapped(underscoreRegexp, (m) => m[0][1].toUpperCase());
+    final varName = 'icon${iconName[0].toUpperCase()}${iconName.substring(1)}';
 
     final iconRaw = iconFile.readAsStringSync();
     final iconDoc = xml.parse(iconRaw);
     final icon = iconDoc.firstChild;
     final shapes = icon.children.map((c) => toSvgNode(c).toSource()).toList();
     print(
-        'const $iconName = const css.SvgIcon(\n'
+        'const $varName = const css.SvgIcon(\n'
         '    \'mui_$iconName\', \'0 0 24 24\',\n'
         '    const [\n'
-        '      ${shapes.join(',\n    ')}\n'
+        '      ${shapes.join(',\n      ')}\n'
         '    ]);\n');
   }
 }
