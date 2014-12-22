@@ -1,7 +1,7 @@
 part of pages;
 
 final vButtonPage = v.componentFactory(ButtonPage);
-class ButtonPage extends mui.AppContentCanvas {
+class ButtonPage extends Component {
   void create() {
     super.create();
     element.id = 'button-examples';

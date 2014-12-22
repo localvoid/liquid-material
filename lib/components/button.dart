@@ -3,10 +3,78 @@ library liquid_material.button;
 import 'dart:html' as html;
 import 'package:liquid/vdom.dart' as v;
 import 'package:liquid/liquid.dart';
-import 'package:liquid_material/components/paper/paper.dart';
-import 'package:liquid_material/components/ripple/ripple.dart';
+import 'package:vcss/vcss.dart' as css;
+import '../vars.dart' as vars;
+import 'paper.dart';
+import 'ripple.dart';
+
+class ButtonBaseStyleSheet extends css.StyleSheet {
+  final require = [Paper.css];
+
+  build() => [
+      css.rule('.mui_button', [
+        css.display('inline-block'),
+        css.cursor('pointer'),
+
+        css.rule('> .mui_paper_container', [
+          css.background(vars.buttonDefaultColor),
+          css.position('relative'),
+          css.overflow('hidden')
+        ]),
+
+        css.rule('&.mui_disabled', [
+          css.cursor('default')
+        ])
+      ]),
+
+      css.rule('.mui_button_content', [
+        css.userSelect('none'),
+        css.position('relative'),
+        css.textAlign('center'),
+        css.padding('0 0.5em'),
+        css.lineHeight('1.5em'),
+
+        css.rule('> a', [
+          css.minWidth(vars.paperButtonMinWidth),
+          css.padding('0 ${vars.desktopGutterLess}'),
+          css.color(vars.buttonDefaultTextColor),
+          css.textDecoration('none'),
+          css.lineHeight(vars.paperButtonHeight),
+          css.display('inline-block')
+        ])
+      ])
+    ];
+}
+
+class CustomButtonStyleSheet extends css.StyleSheet {
+  final String name;
+  final css.Color color;
+  final css.Color textColor;
+  final css.Color hoverColor;
+
+  final require = [Button.css];
+
+  CustomButtonStyleSheet(this.name, css.Color color, this.textColor)
+      : color = color, hoverColor = color;
+
+  build() => [
+      css.rule('.mui_button.$name', [
+        css.backgroundColor(color),
+
+        css.rule('> a', [
+          css.color(textColor)
+        ]),
+
+        css.rule('&:hover', [
+          css.backgroundColor(hoverColor)
+        ])
+      ])
+    ];
+}
 
 class Button extends Paper {
+  static final css = new ButtonBaseStyleSheet();
+
   @property() bool disabled;
 
   Ripple _ripple;
