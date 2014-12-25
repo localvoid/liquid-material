@@ -4,80 +4,55 @@ import 'dart:html' as html;
 import 'package:liquid/vdom.dart' as v;
 import 'package:liquid/liquid.dart';
 import 'package:vcss/vcss.dart' as css;
+import '../layout.dart';
+import '../typography.dart';
 import '../vars.dart' as vars;
 import 'paper.dart';
 import 'ripple.dart';
 
-class ButtonBaseStyleSheet extends css.StyleSheet {
-  final require = [Paper.css];
+class ButtonStyleSheet extends css.StyleSheet {
+  static const height = const css.Size.px(36);
+  static const minWidth = const css.Size.px(64);
+  static const fabSize = const css.Size.px(56);
+  static const fabMiniSize = const css.Size.px(40);
+
+  final require = [Paper.css, Ripple.css];
 
   build() => [
-      css.rule('.mui_button', [
+      css.rule('.Button', [
+        css.position('relative'),
         css.display('inline-block'),
         css.cursor('pointer'),
+        css.height(height),
+        css.minWidth(minWidth),
+        css.background(vars.buttonColor),
+        css.overflow('hidden'),
 
-        css.rule('> .mui_paper_container', [
-          css.background(vars.buttonDefaultColor),
-          css.position('relative'),
-          css.overflow('hidden')
-        ]),
-
-        css.rule('&.mui_disabled', [
+        css.rule('&.disabled', [
           css.cursor('default')
         ])
       ]),
 
-      css.rule('.mui_button_content', [
+      css.rule('.Button_content', [
+        css.height('100%'),
         css.userSelect('none'),
         css.position('relative'),
+        css.display('flex'),
+        css.alignItems('center'),
+        css.padding('0 ${Layout.gridSize}'),
         css.textAlign('center'),
-        css.padding('0 0.5em'),
-        css.lineHeight('1.5em'),
-
-        css.rule('> a', [
-          css.minWidth(vars.paperButtonMinWidth),
-          css.padding('0 ${vars.desktopGutterLess}'),
-          css.color(vars.buttonDefaultTextColor),
-          css.textDecoration('none'),
-          css.lineHeight(vars.paperButtonHeight),
-          css.display('inline-block')
-        ])
+        css.color(vars.buttonTextColor),
+        Typography.button()
       ])
     ];
 }
 
-class CustomButtonStyleSheet extends css.StyleSheet {
-  final String name;
-  final css.Color color;
-  final css.Color textColor;
-  final css.Color hoverColor;
+abstract class Button extends Paper {
+  static final css = new ButtonStyleSheet();
 
-  final require = [Button.css];
+  @property()
+  bool disabled;
 
-  CustomButtonStyleSheet(this.name, css.Color color, this.textColor)
-      : color = color, hoverColor = color;
-
-  build() => [
-      css.rule('.mui_button.$name', [
-        css.backgroundColor(color),
-
-        css.rule('> a', [
-          css.color(textColor)
-        ]),
-
-        css.rule('&:hover', [
-          css.backgroundColor(hoverColor)
-        ])
-      ])
-    ];
-}
-
-class Button extends Paper {
-  static final css = new ButtonBaseStyleSheet();
-
-  @property() bool disabled;
-
-  Ripple _ripple;
   html.DivElement content;
 
   html.DivElement get container => content;
@@ -87,79 +62,137 @@ class Button extends Paper {
 
   void create() {
     super.create();
-    _ripple = new Ripple();
-    _ripple.context = this;
-    _ripple.create();
-
-    element.classes.add('mui-paper-button');
+    element.classes.add('Button');
 
     content = new html.DivElement()
-      ..classes.add('mui-paper-button-content');
+      ..classes.add('Button_content');
 
-    inner
-      ..append(_ripple.element)
-      ..append(content);
-  }
-
-  void init() {
-    element.onMouseDown.listen(handleMouseDown);
+    element.append(content);
   }
 
   v.VRootDecorator<html.DivElement> build() =>
       super.build().decorate(
           v.rootDecorator(classes: disabled == true ? ['mui-disabled'] : null)
       );
+}
 
-  void handleMouseDown(html.MouseEvent ev) {
-    var x = ev.offset.x / element.clientWidth;
-    var y = ev.offset.y / element.clientHeight;
-    _ripple.animate(x, y);
+abstract class InkButton extends Button {
+  Ripple _ripple;
+
+  InkButton({bool disabled: false, int zDepth: 0})
+      : super(disabled: disabled, zDepth: zDepth);
+
+  void create() {
+    super.create();
+  }
+
+  void init() {
+    element.onMouseDown.listen(handleMouseDown);
+    element.onMouseUp.listen(handleMouseUp);
+  }
+
+  void handleMouseDown(html.MouseEvent e) {
+    // lazy ripple render to improve initial render performance
+    if (_ripple == null) {
+      _ripple = new Ripple(element);
+      domScheduler.nextFrame.write(depth).then(_insertRipple);
+    }
+
+    _ripple.touchDown(e);
+  }
+
+  void handleMouseUp(html.MouseEvent ev) {
+    if (_ripple != null) {
+      _ripple.touchUp();
+    }
+  }
+
+  void _insertRipple(_) {
+    element.insertBefore(_ripple.element, content);
   }
 }
 
 final flatButton = v.componentFactory(FlatButton);
 class FlatButton extends Button {
-  FlatButton({bool disabled, int zDepth: 1})
+  FlatButton({bool disabled, int zDepth: 0})
       : super(disabled: disabled, zDepth: zDepth);
 
   void create() {
     super.create();
-    element.classes.add('mui-flat');
+    element.classes.add('flat');
   }
 }
 
+final flatInkButton = v.componentFactory(FlatInkButton);
+class FlatInkButton extends InkButton {
+  FlatInkButton({bool disabled, int zDepth: 0})
+      : super(disabled: disabled, zDepth: zDepth);
+
+  void create() {
+    super.create();
+    element.classes.add('flat');
+  }
+}
+
+final fabButton = v.componentFactory(FabButton);
+class FabButton extends Button {
+  FabButton({bool disabled, int zDepth: 1})
+      : super(disabled: disabled, zDepth: zDepth);
+
+  void create() {
+    super.create();
+    element.classes.add('fab');
+  }
+}
+
+
 final raisedButton = v.componentFactory(RaisedButton);
 class RaisedButton extends Button {
-  bool _mouseDown = false;
-  bool _raising = false;
-
   RaisedButton({bool disabled, int zDepth: 1})
       : super(disabled: disabled, zDepth: zDepth);
 
   void create() {
     super.create();
-    element.classes.add('mui-raised');
+    element.classes.add('raised');
   }
 
   void init() {
     super.init();
-    element.onTransitionEnd.listen(_handleTransitionEnd);
+    element
+      ..onMouseDown.listen(handleMouseDown)
+      ..onMouseUp.listen(handleMouseUp);
+  }
+
+  void handleMouseDown(html.MouseEvent e) {
+    zDepth += 1;
+    invalidate();
+  }
+
+  void handleMouseUp(html.MouseEvent e) {
+    zDepth -= 1;
+    invalidate();
+  }
+}
+
+final raisedInkButton = v.componentFactory(RaisedInkButton);
+class RaisedInkButton extends InkButton {
+  RaisedInkButton({bool disabled, int zDepth: 1})
+      : super(disabled: disabled, zDepth: zDepth);
+
+  void create() {
+    super.create();
+    element.classes.add('raised');
   }
 
   void handleMouseDown(html.MouseEvent e) {
     super.handleMouseDown(e);
-    if (!_mouseDown) {
-      zDepth += 1;
-      _mouseDown = true;
-      invalidate();
-    }
+    zDepth += 1;
+    invalidate();
   }
 
-  void _handleTransitionEnd(html.TransitionEvent ev) {
-    if (_mouseDown) {
-      zDepth -= 1;
-      _mouseDown = false;
-      invalidate();
-    }
+  void handleMouseUp(html.MouseEvent e) {
+    super.handleMouseUp(e);
+    zDepth -= 1;
+    invalidate();
   }
 }

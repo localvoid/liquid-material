@@ -16,5 +16,7 @@ dependency_overrides:
     path: ../vdom
   vcss:
     path: ../vcss
+  dom_scheduler:
+    path: ../dom_scheduler
 transformers:
 - liquid

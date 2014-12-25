@@ -2,287 +2,351 @@ library liquid_material.colors;
 
 import 'package:vcss/vcss.dart';
 
-const red50 = const HexColor('#fde0dc');
-const red100 = const HexColor('#f9bdbb');
-const red200 = const HexColor('#f69988');
-const red300 = const HexColor('#f36c60');
-const red400 = const HexColor('#e84e40');
-const red500 = const HexColor('#e51c23');
-const red600 = const HexColor('#dd191d');
-const red700 = const HexColor('#d01716');
-const red800 = const HexColor('#c41411');
-const red900 = const HexColor('#b0120a');
-const redA100 = const HexColor('#ff7997');
-const redA200 = const HexColor('#ff5177');
-const redA400 = const HexColor('#ff2d6f');
-const redA700 = const HexColor('#e00032');
+class Color {
+  static const int light = 0;
+  static const int dark = 1;
 
-const pink50 = const HexColor('#fce4ec');
-const pink100 = const HexColor('#f8bbd0');
-const pink200 = const HexColor('#f48fb1');
-const pink300 = const HexColor('#f06292');
-const pink400 = const HexColor('#ec407a');
-const pink500 = const HexColor('#e91e63');
-const pink600 = const HexColor('#d81b60');
-const pink700 = const HexColor('#c2185b');
-const pink800 = const HexColor('#ad1457');
-const pink900 = const HexColor('#880e4f');
-const pinkA100 = const HexColor('#ff80ab');
-const pinkA200 = const HexColor('#ff4081');
-const pinkA400 = const HexColor('#f50057');
-const pinkA700 = const HexColor('#c51162');
+  final HexColor color;
+  final int type;
 
-const purple50 = const HexColor('#f3e5f5');
-const purple100 = const HexColor('#e1bee7');
-const purple200 = const HexColor('#ce93d8');
-const purple300 = const HexColor('#ba68c8');
-const purple400 = const HexColor('#ab47bc');
-const purple500 = const HexColor('#9c27b0');
-const purple600 = const HexColor('#8e24aa');
-const purple700 = const HexColor('#7b1fa2');
-const purple800 = const HexColor('#6a1b9a');
-const purple900 = const HexColor('#4a148c');
-const purpleA100 = const HexColor('#ea80fc');
-const purpleA200 = const HexColor('#e040fb');
-const purpleA400 = const HexColor('#d500f9');
-const purpleA700 = const HexColor('#aa00ff');
+  int get contrast => type ^ 1;
 
-const deepPurple50 = const HexColor('#ede7f6');
-const deepPurple100 = const HexColor('#d1c4e9');
-const deepPurple200 = const HexColor('#b39ddb');
-const deepPurple300 = const HexColor('#9575cd');
-const deepPurple400 = const HexColor('#7e57c2');
-const deepPurple500 = const HexColor('#673ab7');
-const deepPurple600 = const HexColor('#5e35b1');
-const deepPurple700 = const HexColor('#512da8');
-const deepPurple800 = const HexColor('#4527a0');
-const deepPurple900 = const HexColor('#311b92');
-const deepPurpleA100 = const HexColor('#b388ff');
-const deepPurpleA200 = const HexColor('#7c4dff');
-const deepPurpleA400 = const HexColor('#651fff');
-const deepPurpleA700 = const HexColor('#6200ea');
+  const Color(this.color, this.type);
 
-const indigo50 = const HexColor('#e8eaf6');
-const indigo100 = const HexColor('#c5cae9');
-const indigo200 = const HexColor('#9fa8da');
-const indigo300 = const HexColor('#7986cb');
-const indigo400 = const HexColor('#5c6bc0');
-const indigo500 = const HexColor('#3f51b5');
-const indigo600 = const HexColor('#3949ab');
-const indigo700 = const HexColor('#303f9f');
-const indigo800 = const HexColor('#283593');
-const indigo900 = const HexColor('#1a237e');
-const indigoA100 = const HexColor('#8c9eff');
-const indigoA200 = const HexColor('#536dfe');
-const indigoA400 = const HexColor('#3d5afe');
-const indigoA700 = const HexColor('#304ffe');
+  String toString() => color.toString();
+}
 
-const blue50 = const HexColor('#e7e9fd');
-const blue100 = const HexColor('#d0d9ff');
-const blue200 = const HexColor('#afbfff');
-const blue300 = const HexColor('#91a7ff');
-const blue400 = const HexColor('#738ffe');
-const blue500 = const HexColor('#5677fc');
-const blue600 = const HexColor('#4e6cef');
-const blue700 = const HexColor('#455ede');
-const blue800 = const HexColor('#3b50ce');
-const blue900 = const HexColor('#2a36b1');
-const blueA100 = const HexColor('#a6baff');
-const blueA200 = const HexColor('#6889ff');
-const blueA400 = const HexColor('#4d73ff');
-const blueA700 = const HexColor('#4d69ff');
+class Palette {
+  static const int P50  = 0;
+  static const int P100 = 1;
+  static const int P200 = 2;
+  static const int P300 = 3;
+  static const int P400 = 4;
+  static const int P500 = 5;
+  static const int P600 = 6;
+  static const int P700 = 7;
+  static const int P800 = 8;
+  static const int P900 = 9;
+  static const int A100 = 10;
+  static const int A200 = 11;
+  static const int A400 = 12;
+  static const int A700 = 13;
 
-const lightBlue50 = const HexColor('#e1f5fe');
-const lightBlue100 = const HexColor('#b3e5fc');
-const lightBlue200 = const HexColor('#81d4fa');
-const lightBlue300 = const HexColor('#4fc3f7');
-const lightBlue400 = const HexColor('#29b6f6');
-const lightBlue500 = const HexColor('#03a9f4');
-const lightBlue600 = const HexColor('#039be5');
-const lightBlue700 = const HexColor('#0288d1');
-const lightBlue800 = const HexColor('#0277bd');
-const lightBlue900 = const HexColor('#01579b');
-const lightBlueA100 = const HexColor('#80d8ff');
-const lightBlueA200 = const HexColor('#40c4ff');
-const lightBlueA400 = const HexColor('#00b0ff');
-const lightBlueA700 = const HexColor('#0091ea');
+  final List<Color> colors;
 
-const cyan50 = const HexColor('#e0f7fa');
-const cyan100 = const HexColor('#b2ebf2');
-const cyan200 = const HexColor('#80deea');
-const cyan300 = const HexColor('#4dd0e1');
-const cyan400 = const HexColor('#26c6da');
-const cyan500 = const HexColor('#00bcd4');
-const cyan600 = const HexColor('#00acc1');
-const cyan700 = const HexColor('#0097a7');
-const cyan800 = const HexColor('#00838f');
-const cyan900 = const HexColor('#006064');
-const cyanA100 = const HexColor('#84ffff');
-const cyanA200 = const HexColor('#18ffff');
-const cyanA400 = const HexColor('#00e5ff');
-const cyanA700 = const HexColor('#00b8d4');
+  const Palette(this.colors);
+}
 
-const teal50 = const HexColor('#e0f2f1');
-const teal100 = const HexColor('#b2dfdb');
-const teal200 = const HexColor('#80cbc4');
-const teal300 = const HexColor('#4db6ac');
-const teal400 = const HexColor('#26a69a');
-const teal500 = const HexColor('#009688');
-const teal600 = const HexColor('#00897b');
-const teal700 = const HexColor('#00796b');
-const teal800 = const HexColor('#00695c');
-const teal900 = const HexColor('#004d40');
-const tealA100 = const HexColor('#a7ffeb');
-const tealA200 = const HexColor('#64ffda');
-const tealA400 = const HexColor('#1de9b6');
-const tealA700 = const HexColor('#00bfa5');
+const paletteRed = const Palette(const [
+  const Color(const HexColor('#ffebee'), Color.light),
+  const Color(const HexColor('#ffcdd2'), Color.light),
+  const Color(const HexColor('#ef9a9a'), Color.light),
+  const Color(const HexColor('#e57373'), Color.light),
+  const Color(const HexColor('#ef5350'), Color.light),
+  const Color(const HexColor('#f44336'), Color.dark),
+  const Color(const HexColor('#e53935'), Color.dark),
+  const Color(const HexColor('#d32f2f'), Color.dark),
+  const Color(const HexColor('#c62828'), Color.dark),
+  const Color(const HexColor('#b71c1c'), Color.dark),
+  const Color(const HexColor('#ff8a80'), Color.light),
+  const Color(const HexColor('#ff5252'), Color.dark),
+  const Color(const HexColor('#ff1744'), Color.dark),
+  const Color(const HexColor('#d50000'), Color.dark)
+]);
 
-const green50 = const HexColor('#d0f8ce');
-const green100 = const HexColor('#a3e9a4');
-const green200 = const HexColor('#72d572');
-const green300 = const HexColor('#42bd41');
-const green400 = const HexColor('#2baf2b');
-const green500 = const HexColor('#259b24');
-const green600 = const HexColor('#0a8f08');
-const green700 = const HexColor('#0a7e07');
-const green800 = const HexColor('#056f00');
-const green900 = const HexColor('#0d5302');
-const greenA100 = const HexColor('#a2f78d');
-const greenA200 = const HexColor('#5af158');
-const greenA400 = const HexColor('#14e715');
-const greenA700 = const HexColor('#12c700');
+const palettePink = const Palette(const [
+  const Color(const HexColor('#fce4ec'), Color.light),
+  const Color(const HexColor('#f8bbd0'), Color.light),
+  const Color(const HexColor('#f8bbd0'), Color.light),
+  const Color(const HexColor('#f06292'), Color.light),
+  const Color(const HexColor('#ec407a'), Color.light),
+  const Color(const HexColor('#e91e63'), Color.dark),
+  const Color(const HexColor('#d81b60'), Color.dark),
+  const Color(const HexColor('#c2185b'), Color.dark),
+  const Color(const HexColor('#ad1457'), Color.dark),
+  const Color(const HexColor('#880e4f'), Color.dark),
+  const Color(const HexColor('#ff80ab'), Color.light),
+  const Color(const HexColor('#ff4081'), Color.dark),
+  const Color(const HexColor('#f50057'), Color.dark),
+  const Color(const HexColor('#c51162'), Color.dark)
+]);
 
-const lightGreen50 = const HexColor('#f1f8e9');
-const lightGreen100 = const HexColor('#dcedc8');
-const lightGreen200 = const HexColor('#c5e1a5');
-const lightGreen300 = const HexColor('#aed581');
-const lightGreen400 = const HexColor('#9ccc65');
-const lightGreen500 = const HexColor('#8bc34a');
-const lightGreen600 = const HexColor('#7cb342');
-const lightGreen700 = const HexColor('#689f38');
-const lightGreen800 = const HexColor('#558b2f');
-const lightGreen900 = const HexColor('#33691e');
-const lightGreenA100 = const HexColor('#ccff90');
-const lightGreenA200 = const HexColor('#b2ff59');
-const lightGreenA400 = const HexColor('#76ff03');
-const lightGreenA700 = const HexColor('#64dd17');
+const palettePurple = const Palette(const [
+  const Color(const HexColor('#f3e5f5'), Color.light),
+  const Color(const HexColor('#e1bee7'), Color.light),
+  const Color(const HexColor('#ce93d8'), Color.light),
+  const Color(const HexColor('#ba68c8'), Color.dark),
+  const Color(const HexColor('#ab47bc'), Color.dark),
+  const Color(const HexColor('#9c27b0'), Color.dark),
+  const Color(const HexColor('#8e24aa'), Color.dark),
+  const Color(const HexColor('#7b1fa2'), Color.dark),
+  const Color(const HexColor('#6a1b9a'), Color.dark),
+  const Color(const HexColor('#4a148c'), Color.dark),
+  const Color(const HexColor('#ea80fc'), Color.light),
+  const Color(const HexColor('#e040fb'), Color.dark),
+  const Color(const HexColor('#d500f9'), Color.dark),
+  const Color(const HexColor('#aa00ff'), Color.dark)
+]);
 
-const lime50 = const HexColor('#f9fbe7');
-const lime100 = const HexColor('#f0f4c3');
-const lime200 = const HexColor('#e6ee9c');
-const lime300 = const HexColor('#dce775');
-const lime400 = const HexColor('#d4e157');
-const lime500 = const HexColor('#cddc39');
-const lime600 = const HexColor('#c0ca33');
-const lime700 = const HexColor('#afb42b');
-const lime800 = const HexColor('#9e9d24');
-const lime900 = const HexColor('#827717');
-const limeA100 = const HexColor('#f4ff81');
-const limeA200 = const HexColor('#eeff41');
-const limeA400 = const HexColor('#c6ff00');
-const limeA700 = const HexColor('#aeea00');
+const paletteDeepPurple = const Palette(const [
+  const Color(const HexColor('#ede7f6'), Color.light),
+  const Color(const HexColor('#d1c4e9'), Color.light),
+  const Color(const HexColor('#b39ddb'), Color.light),
+  const Color(const HexColor('#9575cd'), Color.dark),
+  const Color(const HexColor('#7e57c2'), Color.dark),
+  const Color(const HexColor('#673ab7'), Color.dark),
+  const Color(const HexColor('#5e35b1'), Color.dark),
+  const Color(const HexColor('#512da8'), Color.dark),
+  const Color(const HexColor('#4527a0'), Color.dark),
+  const Color(const HexColor('#311b92'), Color.dark),
+  const Color(const HexColor('#b388ff'), Color.light),
+  const Color(const HexColor('#7c4dff'), Color.dark),
+  const Color(const HexColor('#651fff'), Color.dark),
+  const Color(const HexColor('#6200ea'), Color.dark)
+]);
 
-const yellow50 = const HexColor('#fffde7');
-const yellow100 = const HexColor('#fff9c4');
-const yellow200 = const HexColor('#fff59d');
-const yellow300 = const HexColor('#fff176');
-const yellow400 = const HexColor('#ffee58');
-const yellow500 = const HexColor('#ffeb3b');
-const yellow600 = const HexColor('#fdd835');
-const yellow700 = const HexColor('#fbc02d');
-const yellow800 = const HexColor('#f9a825');
-const yellow900 = const HexColor('#f57f17');
-const yellowA100 = const HexColor('#ffff8d');
-const yellowA200 = const HexColor('#ffff00');
-const yellowA400 = const HexColor('#ffea00');
-const yellowA700 = const HexColor('#ffd600');
+const paletteIndigo = const Palette(const [
+  const Color(const HexColor('#e8eaf6'), Color.light),
+  const Color(const HexColor('#c5cae9'), Color.light),
+  const Color(const HexColor('#9fa8da'), Color.light),
+  const Color(const HexColor('#7986cb'), Color.dark),
+  const Color(const HexColor('#5c6bc0'), Color.dark),
+  const Color(const HexColor('#3f51b5'), Color.dark),
+  const Color(const HexColor('#3949ab'), Color.dark),
+  const Color(const HexColor('#303f9f'), Color.dark),
+  const Color(const HexColor('#283593'), Color.dark),
+  const Color(const HexColor('#1a237e'), Color.dark),
+  const Color(const HexColor('#8c9eff'), Color.light),
+  const Color(const HexColor('#536dfe'), Color.dark),
+  const Color(const HexColor('#3d5afe'), Color.dark),
+  const Color(const HexColor('#304ffe'), Color.dark)
+]);
 
-const amber50 = const HexColor('#fff8e1');
-const amber100 = const HexColor('#ffecb3');
-const amber200 = const HexColor('#ffe082');
-const amber300 = const HexColor('#ffd54f');
-const amber400 = const HexColor('#ffca28');
-const amber500 = const HexColor('#ffc107');
-const amber600 = const HexColor('#ffb300');
-const amber700 = const HexColor('#ffa000');
-const amber800 = const HexColor('#ff8f00');
-const amber900 = const HexColor('#ff6f00');
-const amberA100 = const HexColor('#ffe57f');
-const amberA200 = const HexColor('#ffd740');
-const amberA400 = const HexColor('#ffc400');
-const amberA700 = const HexColor('#ffab00');
+const paletteBlue = const Palette(const [
+  const Color(const HexColor('#e3f2fd'), Color.light),
+  const Color(const HexColor('#bbdefb'), Color.light),
+  const Color(const HexColor('#90caf9'), Color.light),
+  const Color(const HexColor('#64b5f6'), Color.light),
+  const Color(const HexColor('#42a5f5'), Color.light),
+  const Color(const HexColor('#2196f3'), Color.dark),
+  const Color(const HexColor('#1e88e5'), Color.dark),
+  const Color(const HexColor('#1976d2'), Color.dark),
+  const Color(const HexColor('#1565c0'), Color.dark),
+  const Color(const HexColor('#0d47a1'), Color.dark),
+  const Color(const HexColor('#82b1ff'), Color.light),
+  const Color(const HexColor('#448aff'), Color.dark),
+  const Color(const HexColor('#2979ff'), Color.dark),
+  const Color(const HexColor('#2962ff'), Color.dark)
+]);
 
-const orange50 = const HexColor('#fff3e0');
-const orange100 = const HexColor('#ffe0b2');
-const orange200 = const HexColor('#ffcc80');
-const orange300 = const HexColor('#ffb74d');
-const orange400 = const HexColor('#ffa726');
-const orange500 = const HexColor('#ff9800');
-const orange600 = const HexColor('#fb8c00');
-const orange700 = const HexColor('#f57c00');
-const orange800 = const HexColor('#ef6c00');
-const orange900 = const HexColor('#e65100');
-const orangeA100 = const HexColor('#ffd180');
-const orangeA200 = const HexColor('#ffab40');
-const orangeA400 = const HexColor('#ff9100');
-const orangeA700 = const HexColor('#ff6d00');
+const paletteLightBlue = const Palette(const [
+  const Color(const HexColor('#e1f5fe'), Color.light),
+  const Color(const HexColor('#b3e5fc'), Color.light),
+  const Color(const HexColor('#81d4fa'), Color.light),
+  const Color(const HexColor('#4fc3f7'), Color.light),
+  const Color(const HexColor('#29b6f6'), Color.light),
+  const Color(const HexColor('#03a9f4'), Color.dark),
+  const Color(const HexColor('#039be5'), Color.dark),
+  const Color(const HexColor('#0288d1'), Color.dark),
+  const Color(const HexColor('#0277bd'), Color.dark),
+  const Color(const HexColor('#01579b'), Color.dark),
+  const Color(const HexColor('#80d8ff'), Color.light),
+  const Color(const HexColor('#40c4ff'), Color.light),
+  const Color(const HexColor('#00b0ff'), Color.light),
+  const Color(const HexColor('#0091ea'), Color.dark)
+]);
 
-const deepOrange50 = const HexColor('#fbe9e7');
-const deepOrange100 = const HexColor('#ffccbc');
-const deepOrange200 = const HexColor('#ffab91');
-const deepOrange300 = const HexColor('#ff8a65');
-const deepOrange400 = const HexColor('#ff7043');
-const deepOrange500 = const HexColor('#ff5722');
-const deepOrange600 = const HexColor('#f4511e');
-const deepOrange700 = const HexColor('#e64a19');
-const deepOrange800 = const HexColor('#d84315');
-const deepOrange900 = const HexColor('#bf360c');
-const deepOrangeA100 = const HexColor('#ff9e80');
-const deepOrangeA200 = const HexColor('#ff6e40');
-const deepOrangeA400 = const HexColor('#ff3d00');
-const deepOrangeA700 = const HexColor('#dd2c00');
+const paletteCyan = const Palette(const [
+  const Color(const HexColor('#e0f7fa'), Color.light),
+  const Color(const HexColor('#b2ebf2'), Color.light),
+  const Color(const HexColor('#80deea'), Color.light),
+  const Color(const HexColor('#4dd0e1'), Color.light),
+  const Color(const HexColor('#26c6da'), Color.light),
+  const Color(const HexColor('#00bcd4'), Color.dark),
+  const Color(const HexColor('#00acc1'), Color.dark),
+  const Color(const HexColor('#0097a7'), Color.dark),
+  const Color(const HexColor('#00838f'), Color.dark),
+  const Color(const HexColor('#006064'), Color.dark),
+  const Color(const HexColor('#84ffff'), Color.light),
+  const Color(const HexColor('#18ffff'), Color.light),
+  const Color(const HexColor('#00e5ff'), Color.light),
+  const Color(const HexColor('#00b8d4'), Color.light)
+]);
 
-const brown50 = const HexColor('#efebe9');
-const brown100 = const HexColor('#d7ccc8');
-const brown200 = const HexColor('#bcaaa4');
-const brown300 = const HexColor('#a1887f');
-const brown400 = const HexColor('#8d6e63');
-const brown500 = const HexColor('#795548');
-const brown600 = const HexColor('#6d4c41');
-const brown700 = const HexColor('#5d4037');
-const brown800 = const HexColor('#4e342e');
-const brown900 = const HexColor('#3e2723');
+const paletteTeal = const Palette(const [
+  const Color(const HexColor('#e0f2f1'), Color.light),
+  const Color(const HexColor('#b2dfdb'), Color.light),
+  const Color(const HexColor('#80cbc4'), Color.light),
+  const Color(const HexColor('#4db6ac'), Color.light),
+  const Color(const HexColor('#26a69a'), Color.light),
+  const Color(const HexColor('#009688'), Color.dark),
+  const Color(const HexColor('#00897b'), Color.dark),
+  const Color(const HexColor('#00796b'), Color.dark),
+  const Color(const HexColor('#00695c'), Color.dark),
+  const Color(const HexColor('#004d40'), Color.dark),
+  const Color(const HexColor('#a7ffeb'), Color.light),
+  const Color(const HexColor('#64ffda'), Color.light),
+  const Color(const HexColor('#1de9b6'), Color.light),
+  const Color(const HexColor('#00bfa5'), Color.light)
+]);
 
-const blueGrey50 = const HexColor('#eceff1');
-const blueGrey100 = const HexColor('#cfd8dc');
-const blueGrey200 = const HexColor('#b0bec5');
-const blueGrey300 = const HexColor('#90a4ae');
-const blueGrey400 = const HexColor('#78909c');
-const blueGrey500 = const HexColor('#607d8b');
-const blueGrey600 = const HexColor('#546e7a');
-const blueGrey700 = const HexColor('#455a64');
-const blueGrey800 = const HexColor('#37474f');
-const blueGrey900 = const HexColor('#263238');
+const paletteGreen = const Palette(const [
+  const Color(const HexColor('#e8f5e9'), Color.light),
+  const Color(const HexColor('#c8e6c9'), Color.light),
+  const Color(const HexColor('#a5d6a7'), Color.light),
+  const Color(const HexColor('#81c784'), Color.light),
+  const Color(const HexColor('#66bb6a'), Color.light),
+  const Color(const HexColor('#4caf50'), Color.dark),
+  const Color(const HexColor('#43a047'), Color.dark),
+  const Color(const HexColor('#388e3c'), Color.dark),
+  const Color(const HexColor('#2e7d32'), Color.dark),
+  const Color(const HexColor('#1b5e20'), Color.dark),
+  const Color(const HexColor('#b9f6ca'), Color.light),
+  const Color(const HexColor('#69f0ae'), Color.light),
+  const Color(const HexColor('#00e676'), Color.light),
+  const Color(const HexColor('#00c853'), Color.light)
+]);
 
-const grey50 = const HexColor('#fafafa');
-const grey100 = const HexColor('#f5f5f5');
-const grey200 = const HexColor('#eeeeee');
-const grey300 = const HexColor('#e0e0e0');
-const grey400 = const HexColor('#bdbdbd');
-const grey500 = const HexColor('#9e9e9e');
-const grey600 = const HexColor('#757575');
-const grey700 = const HexColor('#616161');
-const grey800 = const HexColor('#424242');
-const grey900 = const HexColor('#212121');
+const paletteLightGreen = const Palette(const [
+  const Color(const HexColor('#f1f8e9'), Color.light),
+  const Color(const HexColor('#dcedc8'), Color.light),
+  const Color(const HexColor('#c5e1a5'), Color.light),
+  const Color(const HexColor('#aed581'), Color.light),
+  const Color(const HexColor('#9ccc65'), Color.light),
+  const Color(const HexColor('#8bc34a'), Color.light),
+  const Color(const HexColor('#7cb342'), Color.light),
+  const Color(const HexColor('#689f38'), Color.light),
+  const Color(const HexColor('#558b2f'), Color.dark),
+  const Color(const HexColor('#33691e'), Color.dark),
+  const Color(const HexColor('#ccff90'), Color.light),
+  const Color(const HexColor('#b2ff59'), Color.light),
+  const Color(const HexColor('#76ff03'), Color.light),
+  const Color(const HexColor('#64dd17'), Color.light)
+]);
 
-const black = const HexColor('#000000');
-const white = const HexColor('#ffffff');
+const paletteLime = const Palette(const [
+  const Color(const HexColor('#f9fbe7'), Color.light),
+  const Color(const HexColor('#f0f4c3'), Color.light),
+  const Color(const HexColor('#e6ee9c'), Color.light),
+  const Color(const HexColor('#dce775'), Color.light),
+  const Color(const HexColor('#d4e157'), Color.light),
+  const Color(const HexColor('#cddc39'), Color.light),
+  const Color(const HexColor('#c0ca33'), Color.light),
+  const Color(const HexColor('#afb42b'), Color.light),
+  const Color(const HexColor('#9e9d24'), Color.light),
+  const Color(const HexColor('#827717'), Color.dark),
+  const Color(const HexColor('#f4ff81'), Color.light),
+  const Color(const HexColor('#eeff41'), Color.light),
+  const Color(const HexColor('#c6ff00'), Color.light),
+  const Color(const HexColor('#aeea00'), Color.light)
+]);
 
-const fullBlack = const RgbColor(0, 0, 0, 1);
-const darkBlack = const RgbColor(0, 0, 0, 0.87);
-const lightBlack = const RgbColor(0, 0, 0, 0.54);
-const minBlack = const RgbColor(0, 0, 0, 0.26);
-const faintBlack = const RgbColor(0, 0, 0, 0.12);
-const fullWhite = const RgbColor(255, 255, 255, 1);
-const darkWhite = const RgbColor(255, 255, 255, 0.87);
-const lightWhite = const RgbColor(255, 255, 255, 0.54);
+const paletteYellow = const Palette(const [
+  const Color(const HexColor('#fffde7'), Color.light),
+  const Color(const HexColor('#fff9c4'), Color.light),
+  const Color(const HexColor('#fff59d'), Color.light),
+  const Color(const HexColor('#fff176'), Color.light),
+  const Color(const HexColor('#ffee58'), Color.light),
+  const Color(const HexColor('#ffeb3b'), Color.light),
+  const Color(const HexColor('#fdd835'), Color.light),
+  const Color(const HexColor('#fbc02d'), Color.light),
+  const Color(const HexColor('#f9a825'), Color.light),
+  const Color(const HexColor('#f57f17'), Color.light),
+  const Color(const HexColor('#ffff8d'), Color.light),
+  const Color(const HexColor('#ffff00'), Color.light),
+  const Color(const HexColor('#ffea00'), Color.light),
+  const Color(const HexColor('#ffd600'), Color.light)
+]);
+
+const paletteAmber = const Palette(const [
+  const Color(const HexColor('#fff8e1'), Color.light),
+  const Color(const HexColor('#ffecb3'), Color.light),
+  const Color(const HexColor('#ffe082'), Color.light),
+  const Color(const HexColor('#ffd54f'), Color.light),
+  const Color(const HexColor('#ffca28'), Color.light),
+  const Color(const HexColor('#ffc107'), Color.light),
+  const Color(const HexColor('#ffb300'), Color.light),
+  const Color(const HexColor('#ffa000'), Color.light),
+  const Color(const HexColor('#ff8f00'), Color.light),
+  const Color(const HexColor('#ff6f00'), Color.light),
+  const Color(const HexColor('#ffe57f'), Color.light),
+  const Color(const HexColor('#ffd740'), Color.light),
+  const Color(const HexColor('#ffc400'), Color.light),
+  const Color(const HexColor('#ffab00'), Color.light)
+]);
+
+const paletteOrange = const Palette(const [
+  const Color(const HexColor('#fff3e0'), Color.light),
+  const Color(const HexColor('#ffe0b2'), Color.light),
+  const Color(const HexColor('#ffcc80'), Color.light),
+  const Color(const HexColor('#ffb74d'), Color.light),
+  const Color(const HexColor('#ffa726'), Color.light),
+  const Color(const HexColor('#ff9800'), Color.light),
+  const Color(const HexColor('#fb8c00'), Color.light),
+  const Color(const HexColor('#f57c00'), Color.light),
+  const Color(const HexColor('#ef6c00'), Color.dark),
+  const Color(const HexColor('#e65100'), Color.dark),
+  const Color(const HexColor('#ffd180'), Color.light),
+  const Color(const HexColor('#ffab40'), Color.light),
+  const Color(const HexColor('#ff9100'), Color.light),
+  const Color(const HexColor('#ff6d00'), Color.light)
+]);
+
+const paletteDeepOrange = const Palette(const [
+  const Color(const HexColor('#fbe9e7'), Color.light),
+  const Color(const HexColor('#ffccbc'), Color.light),
+  const Color(const HexColor('#ffab91'), Color.light),
+  const Color(const HexColor('#ff8a65'), Color.light),
+  const Color(const HexColor('#ff7043'), Color.light),
+  const Color(const HexColor('#ff5722'), Color.dark),
+  const Color(const HexColor('#f4511e'), Color.dark),
+  const Color(const HexColor('#e64a19'), Color.dark),
+  const Color(const HexColor('#d84315'), Color.dark),
+  const Color(const HexColor('#bf360c'), Color.dark),
+  const Color(const HexColor('#ff9e80'), Color.light),
+  const Color(const HexColor('#ff6e40'), Color.light),
+  const Color(const HexColor('#ff3d00'), Color.dark),
+  const Color(const HexColor('#dd2c00'), Color.dark)
+]);
+
+const paletteBrown = const Palette(const [
+  const Color(const HexColor('#efebe9'), Color.light),
+  const Color(const HexColor('#d7ccc8'), Color.light),
+  const Color(const HexColor('#bcaaa4'), Color.light),
+  const Color(const HexColor('#a1887f'), Color.dark),
+  const Color(const HexColor('#8d6e63'), Color.dark),
+  const Color(const HexColor('#795548'), Color.dark),
+  const Color(const HexColor('#6d4c41'), Color.dark),
+  const Color(const HexColor('#5d4037'), Color.dark),
+  const Color(const HexColor('#4e342e'), Color.dark),
+  const Color(const HexColor('#3e2723'), Color.dark)
+]);
+
+const paletteGrey = const Palette(const [
+  const Color(const HexColor('#fafafa'), Color.light),
+  const Color(const HexColor('#f5f5f5'), Color.light),
+  const Color(const HexColor('#eeeeee'), Color.light),
+  const Color(const HexColor('#e0e0e0'), Color.light),
+  const Color(const HexColor('#bdbdbd'), Color.light),
+  const Color(const HexColor('#9e9e9e'), Color.light),
+  const Color(const HexColor('#757575'), Color.dark),
+  const Color(const HexColor('#616161'), Color.dark),
+  const Color(const HexColor('#424242'), Color.dark),
+  const Color(const HexColor('#212121'), Color.dark)
+]);
+
+const paletteBlueGrey = const Palette(const [
+  const Color(const HexColor('#eceff1'), Color.light),
+  const Color(const HexColor('#cfd8dc'), Color.light),
+  const Color(const HexColor('#b0bec5'), Color.light),
+  const Color(const HexColor('#90a4ae'), Color.light),
+  const Color(const HexColor('#78909c'), Color.dark),
+  const Color(const HexColor('#607d8b'), Color.dark),
+  const Color(const HexColor('#546e7a'), Color.dark),
+  const Color(const HexColor('#455a64'), Color.dark),
+  const Color(const HexColor('#37474f'), Color.dark),
+  const Color(const HexColor('#263238'), Color.dark)
+]);
+
+const black = const Color(const HexColor('#000000'), Color.dark);
+const white = const Color(const HexColor('#ffffff'), Color.light);

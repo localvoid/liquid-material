@@ -2,21 +2,47 @@ library liquid_material.icon;
 
 import 'dart:svg' as svg;
 import 'package:vdom/vdom.dart' as vdom;
-import 'package:vdom/src/utils/style.dart';
 import 'package:vcss/vcss.dart' as css;
+import '../colors.dart';
 
-VIcon icon(css.SvgIcon icon,
-           {Object key,
-            Map<String, String> shapeStyles,
-            String id,
-            String type,
-            Map<String, String> attributes,
-            List<String> classes,
-            Map<String, String> styles}) {
-  return new VIcon(
+class IconStyleSheet extends css.StyleSheet {
+  static const size = const css.Size.px(24);
+  static const bigSize = const css.Size.px(32);
+
+  static num calcOpacity(int backgroundType, {bool active: true}) {
+    if (backgroundType == Color.light) {
+      return active ? 0.54 : 0.26;
+    }
+    return active ? 1 : 0.3;
+  }
+
+  build() =>
+      css.rule('.Icon', [
+        css.display('inline-block'),
+        css.height(size),
+        css.width(size),
+        css.verticalAlign('middle'),
+        css.backgroundRepeat('no-repeat'),
+        css.fill('currentcolor'),
+
+        css.rule('&.big', [
+          css.height(bigSize),
+          css.width(bigSize)
+        ])
+      ]);
+}
+
+Icon icon(css.SvgIcon icon,
+          {Object key,
+           String alt,
+           String id,
+           String type,
+           Map<String, String> attributes,
+           List<String> classes,
+           Map<String, String> styles}) {
+  return new Icon(
       icon,
       key: key,
-      shapeStyles: shapeStyles,
       id: id,
       type: type,
       attributes: attributes,
@@ -24,16 +50,18 @@ VIcon icon(css.SvgIcon icon,
       styles: styles);
 }
 
-class VIcon extends vdom.VElement<svg.SvgSvgElement> {
-  final css.SvgIcon icon;
-  final Map<String, String> shapeStyles;
-  svg.UseElement shapeRef;
+class Icon extends vdom.VElement<svg.SvgSvgElement> {
+  static final css = new IconStyleSheet();
 
-  VIcon(this.icon,
+  final css.SvgIcon icon;
+  final String alt;
+  svg.UseElement _shapeRef;
+
+  Icon(this.icon,
       {Object key,
-       this.shapeStyles,
        String id,
        String type,
+       this.alt,
        Map<String, String> attributes,
        List<String> classes,
        Map<String, String> styles})
@@ -53,31 +81,31 @@ class VIcon extends vdom.VElement<svg.SvgSvgElement> {
   void render(vdom.Context context) {
     super.render(context);
     ref
-      ..classes.add('mui_icon');
+      ..classes.add('Icon')
+      ..setAttribute('role', 'img')
+      ..setAttribute('viewBox', icon.viewBox)
+      ..setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
-    shapeRef = new svg.UseElement()
-      ..classes.add('mui_icon_shape')
+    if (alt != null) {
+      ref.setAttribute('alt', alt);
+    }
+
+    _shapeRef = new svg.UseElement()
       ..setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#${icon.id}');
 
-    if (shapeStyles != null) {
-      shapeStyles.forEach((k, v) {
-        shapeRef.style.setProperty(k, v);
-      });
-    }
-
-    ref.append(shapeRef);
+    ref.append(_shapeRef);
   }
 
-  void update(VIcon other, vdom.Context context) {
+  void update(Icon other, vdom.Context context) {
     super.update(other, context);
-    other.shapeRef = shapeRef;
+    other._shapeRef = _shapeRef;
 
-    if (icon.id != other.icon.id) {
-      shapeRef.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#${other.icon.id}');
+    if (alt != other.alt) {
+      ref.setAttribute('alt', other.alt);
     }
 
-    if (shapeStyles != null || other.shapeStyles != null) {
-      updateStyle(shapeStyles, other.shapeStyles, shapeRef.style);
+    if (icon.id != other.icon.id) {
+      _shapeRef.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#${other.icon.id}');
     }
   }
 }

@@ -4,6 +4,8 @@ import 'dart:html' as html;
 import 'package:liquid/liquid.dart';
 import 'package:liquid/vdom.dart' as v;
 import 'package:vcss/vcss.dart' as css;
+import '../layout.dart';
+import '../typography.dart';
 import '../vars.dart' as vars;
 
 const int alignTop = 0;
@@ -21,41 +23,50 @@ String alignToString(int align) {
 }
 
 class ToolBarStyleSheet extends css.StyleSheet {
+  /*
+   * if (Layout.type & (Layout.xsScreen | Layout.landscape)) {
+   *   height = 48;
+   * } else if (Layout.type & Layout.xsScreen) {
+   *   height = 56;
+   * } else {
+   *   height = 64;
+   * }
+   */
+  static const rowHeight = const css.Size.px(64);
+
   build() => [
-      css.rule('.mui_toolBar', [
-        css.display('relative'),
-        css.height(vars.desktopToolbarHeight),
-        css.backgroundColor(vars.toolBarColor),
+      css.rule('.ToolBar', [
+        css.position('relative'),
+        css.minHeight(rowHeight),
+        Typography.title(),
 
-//        css.media('mobile', [
-//          css.height(vars.mobileToolbarHeight)
-//        ]),
-
-        css.rule('&.mui_mediumTall', [
-          css.height(vars.desktopToolbarHeight * 2)
+        css.rule('&.mediumTall', [
+          css.height(rowHeight * 2)
         ]),
 
-        css.rule('&.mui_tall', [
-          css.height(vars.desktopToolbarHeight * 3)
+        css.rule('&.tall', [
+          css.height(rowHeight * 3)
         ]),
 
-        css.rule(['&.mui_mediumTall', '&.mui_tall'], [
+        css.rule(['&.mediumTall', '&.tall'], [
           css.transform('translateY(100%)')
         ])
       ]),
 
-      css.rule('.mui_toolBar_row', [
-        css.height(vars.desktopToolbarHeight),
-        css.padding('0 ${vars.desktopGutterMini}'),
+      css.rule('.ToolBarRow', [
+        css.display('flex'),
+        css.alignItems('center'),
+        css.height(rowHeight),
+        css.padding('0 ${Layout.gridSize * 3}'), // gridSize * 2 on mobile
 
-        css.rule('&.mui_bottom', [
+        css.rule('&.bottom', [
           css.position('absolute'),
           css.left(0),
           css.right(0),
           css.bottom(0)
         ]),
 
-        css.rule('&.mui_middle', [
+        css.rule('&.middle', [
           css.position('absolute'),
           css.left(0),
           css.right(0),
@@ -71,7 +82,7 @@ class ToolBar extends Component {
 
   void create() {
     element = new html.DivElement()
-      ..classes.add('mui_toolBar');
+      ..classes.add('ToolBar');
   }
 
   build() => v.rootDecorator();
@@ -86,8 +97,8 @@ class ToolBarRow extends Component {
   void create() {
     element = new html.DivElement();
     element.classes
-      ..add('mui_toolBar_row')
-      ..add('mui_${alignToString(align)}');
+      ..add('ToolBarRow')
+      ..add(alignToString(align));
   }
 
   build() => v.rootDecorator();

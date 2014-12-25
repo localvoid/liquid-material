@@ -4,57 +4,40 @@ import 'dart:html' as html;
 import 'package:liquid/liquid.dart';
 import 'package:liquid/vdom.dart' as v;
 import 'package:vcss/vcss.dart' as css;
+import '../style.dart';
 
 class PaperStyleSheet extends css.StyleSheet {
   build() => [
-      css.rule('.mui_paper', [
-        css.transition('box-shadow .28s cubic-bezier(0.4, 0, .2, 1)')
+      css.rule('.Paper', [
+        css.transition('box-shadow 0.5s $swiftEaseInOut')
       ]),
 
-      css.rule('.mui_paper_container', [
-        css.height('100%'),
-        css.width('100%')
+      css.rule('.z1', [
+        paperShadow(1)
       ]),
 
-      css.rule('.mui_z1', [
-        css.boxShadow('0 1px 4px rgba(0, 0, 0, 0.24), '
-                      '0 1px 6px rgba(0, 0, 0, 0.12)')
+      css.rule('.z2', [
+        paperShadow(2)
       ]),
 
-      css.rule('.mui_z2', [
-        css.boxShadow('0 3px 10px rgba(0, 0, 0, 0.23), '
-                      '0 3px 10px rgba(0, 0, 0, 0.16)')
+      css.rule('.z3', [
+        paperShadow(3)
       ]),
 
-      css.rule('.mui_z3', [
-        css.boxShadow('0 6px 10px rgba(0, 0, 0, 0.23), '
-                      '0 10px 30px rgba(0, 0, 0, 0.19)')
+      css.rule('.z4', [
+        paperShadow(4)
       ]),
 
-      css.rule('.mui_z4', [
-        css.boxShadow('0 10px 18px rgba(0, 0, 0, 0.22), '
-                      '0 14px 45px rgba(0, 0, 0, 0.25)')
+      css.rule('.z5', [
+        paperShadow(5)
       ]),
 
-      css.rule('.mui_z5', [
-        css.boxShadow('0 15px 20px rgba(0, 0, 0, 0.22), '
-                      '0 19px 60px rgba(0, 0, 0, 0.30)')
+      css.rule('&.round', [
+        css.borderRadius('2px')
       ]),
 
-      css.rule('.mui_rounded', [
-        css.borderRadius('2px'),
-
-        css.rule('& > .mui_paper_container', [
-          css.borderRadius('2px')
-        ])
-      ]),
-
-      css.rule('.mui_circle', [
-        css.borderRadius('50%'),
-
-        css.rule('& > .mui_paper_container', [
-          css.borderRadius('50%')
-        ])
+      css.rule('&.circle', [
+        css.borderRadius('50%')
       ])
     ];
 }
@@ -62,40 +45,29 @@ class PaperStyleSheet extends css.StyleSheet {
 abstract class Paper extends Component<html.DivElement> {
   static final css = new PaperStyleSheet();
 
-  html.DivElement inner;
-
   @property() int zDepth;
-
-  html.DivElement get container => inner;
 
   Paper({this.zDepth: 0});
 
   void create() {
-    element = new html.DivElement();
-    inner = new html.DivElement()
-      ..classes.add('mui_paper_container');
-
-    element
-      ..classes.add('mui_paper')
-      ..append(inner);
+    element = new html.DivElement()
+      ..classes.add('Paper');
   }
 
   v.VRootDecorator<html.DivElement> build() =>
-      v.rootDecorator(
-          innerContainer: inner,
-          classes: ['mui_z$zDepth']);
+      v.rootDecorator(classes: ['z$zDepth']);
 }
 
 abstract class CirclePaper extends Paper {
   void create() {
     super.create();
-    element.classes.add('mui_circle');
+    element.classes.add('circle');
   }
 }
 
-abstract class RoundedPaper extends Paper {
+abstract class RoundPaper extends Paper {
   void create() {
     super.create();
-    element.classes.add('mui_rounded');
+    element.classes.add('round');
   }
 }

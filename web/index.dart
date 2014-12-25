@@ -11,7 +11,8 @@ class ApplicationStyleSheet extends css.StyleSheet {
   static final instance = new ApplicationStyleSheet();
 
   final require = [mui.MainStyleSheet.instance,
-                   mui.AppBar.css];
+                   mui.Button.css,
+                   mui.Icon.css];
 
   final icons = [mui.icon3dRotation];
 
@@ -36,8 +37,8 @@ class Application extends Component {
 
   build() {
     return v.root()([
-      mui.appBar(title: 'Components Demo'),
-      mui.icon(mui.icon3dRotation, shapeStyles: {'fill': '#f00'})
+      mui.flatInkButton()(v.div()('Subject Title')),
+      mui.raisedInkButton()(v.div()('Subject Title')),
     ]);
   }
 }
