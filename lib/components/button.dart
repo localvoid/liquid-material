@@ -8,8 +8,10 @@ import 'package:vcss/vcss.dart' as css;
 
 import 'paper.dart';
 import 'ripple.dart';
+import 'icon.dart' as mui;
 import '../layout.dart';
 import '../typography.dart';
+import '../colors.dart';
 import '../vars.dart' as vars;
 
 class ButtonStyleSheet extends css.StyleSheet {
@@ -24,11 +26,11 @@ class ButtonStyleSheet extends css.StyleSheet {
       css.rule('.Button', [
         css.position('relative'),
         css.display('inline-block'),
+//        css.justifyContent('center'),
         css.cursor('pointer'),
         css.height(height),
         css.minWidth(minWidth),
         css.background(vars.buttonColor),
-        css.overflow('hidden'),
         css.touchAction('none'),
         css.userSelect('none'),
         css.textAlign('center'),
@@ -37,7 +39,20 @@ class ButtonStyleSheet extends css.StyleSheet {
 
         css.rule('&.disabled', [
           css.cursor('default')
-        ])
+        ]),
+
+
+        css.rule('&.fab', [
+          css.height(fabSize),
+          css.minWidth(fabSize),
+          css.borderRadius('50%'),
+          css.background(vars.colorAccent.colors[Palette.P500]),
+          css.color(white),
+
+          css.rule('.Icon', [
+            css.margin('0 auto')
+          ])
+        ]),
       ]),
 
       css.rule('.Button_content', [
@@ -46,7 +61,9 @@ class ButtonStyleSheet extends css.StyleSheet {
         css.display('flex'),
         css.alignItems('center'),
         css.padding('0 ${Layout.gridSize}')
-      ])
+      ]),
+
+
     ];
 }
 
@@ -287,6 +304,40 @@ class RaisedInkButton extends InkButton {
   }
 
   void handleUp(html.MouseEvent e) {
+    super.handleUp(e);
+    zDepth -= 1;
+    invalidate();
+  }
+}
+
+final fabInk = v.componentFactory(FabInk);
+class FabInk extends InkButton {
+  @property(required: true)
+  css.SvgIcon icon;
+
+  FabInk({this.icon, bool disabled: false, int zDepth: 1})
+      : super(disabled: disabled, zDepth: zDepth);
+
+  void create() {
+    super.create();
+    element.classes
+      ..add('fab')
+      ..add('circle');
+  }
+
+  build() => super.build().decorate(
+      v.root()(
+        mui.icon(icon)
+      )
+    );
+
+  void handleDown(html.Event e) {
+    super.handleDown(e);
+    zDepth += 1;
+    invalidate();
+  }
+
+  void handleUp(html.Event e) {
     super.handleUp(e);
     zDepth -= 1;
     invalidate();

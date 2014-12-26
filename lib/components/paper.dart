@@ -8,35 +8,43 @@ import '../style.dart';
 
 class PaperStyleSheet extends css.StyleSheet {
   build() => [
-      css.rule('.Paper', [
+      css.rule('.Paper_shadow', [
+        css.position('absolute'),
+        css.top(0),
+        css.left(0),
+        css.right(0),
+        css.bottom(0),
+        css.borderRadius('inherit'),
         css.transition('box-shadow 0.5s $swiftEaseInOut'),
-        css.rule('&.round', [
-          css.borderRadius('2px')
-        ]),
+      ]),
 
+      css.rule('.Paper', [
+        css.rule('&.round', [
+          css.borderRadius('3px')
+        ]),
         css.rule('&.circle', [
           css.borderRadius('50%')
+        ]),
+
+        css.rule('&.z1 > .Paper_shadow', [
+          paperShadow(1)
+        ]),
+
+        css.rule('&.z2 > .Paper_shadow', [
+          paperShadow(2)
+        ]),
+
+        css.rule('&.z3 > .Paper_shadow', [
+          paperShadow(3)
+        ]),
+
+        css.rule('&.z4 > .Paper_shadow', [
+          paperShadow(4)
+        ]),
+
+        css.rule('&.z5 > .Paper_shadow', [
+          paperShadow(5)
         ])
-      ]),
-
-      css.rule('.z1', [
-        paperShadow(1)
-      ]),
-
-      css.rule('.z2', [
-        paperShadow(2)
-      ]),
-
-      css.rule('.z3', [
-        paperShadow(3)
-      ]),
-
-      css.rule('.z4', [
-        paperShadow(4)
-      ]),
-
-      css.rule('.z5', [
-        paperShadow(5)
       ])
     ];
 }
@@ -46,11 +54,16 @@ abstract class Paper extends Component<html.DivElement> {
 
   @property() int zDepth;
 
+  final html.DivElement shadowElement = new html.DivElement();
+
   Paper({this.zDepth: 0});
 
   void create() {
     element = new html.DivElement()
       ..classes.add('Paper');
+
+    shadowElement.classes.add('Paper_shadow');
+    element.append(shadowElement);
   }
 
   v.VRootDecorator<html.DivElement> build() =>

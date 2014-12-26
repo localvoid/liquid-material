@@ -14,7 +14,7 @@ class ApplicationStyleSheet extends css.StyleSheet {
                    mui.Button.css,
                    mui.Icon.css];
 
-  final icons = [mui.icon3dRotation];
+  final icons = [mui.iconComment];
 
   build() => [
       css.rule(['.paper-examples .mui-paper'], [
@@ -30,7 +30,12 @@ class ApplicationStyleSheet extends css.StyleSheet {
 
       css.rule('.raised1', [
         css.background(mui.paletteBlue.colors[mui.Palette.P500]),
-        css.color(mui.white)
+        css.color(mui.white),
+        css.margin('40px')
+      ]),
+
+      css.rule('container', [
+        css.height('100%'),
       ])
     ];
 }
@@ -41,9 +46,10 @@ class Application extends Component {
   @property(required: true) int page = 0;
 
   build() {
-    return v.root()([
+    return v.root(type: 'container')([
       mui.flatInkButton(type: 'flat1')(v.div()('Subject Title')),
       mui.raisedInkButton(type: 'raised1')(v.div()('Subject Title')),
+      mui.fabInk(icon: mui.iconComment, type: 'fab1')
     ]);
   }
 }

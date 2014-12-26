@@ -10,6 +10,7 @@ class RippleStyleSheet extends css.StyleSheet {
   build() => [
       css.rule('.Ripple', [
         css.position('absolute'),
+        css.transform('translate3d(0, 0, 0)'),
         css.top(0),
         css.left(0),
         css.right(0),
@@ -58,16 +59,16 @@ class RippleWave {
     element.classes.add('Ripple_wave');
     element.style
       ..background = color
-      ..transform = 'translate(${from.x}px, ${from.y}px) scale(0.01)';
+      ..transform = 'translate3d(${from.x}px, ${from.y}px, 0) scale(0.01)';
   }
 
   void update() {
-    element.style.transform = 'translate(${to.x}px, ${to.y}px) scale($scaleFactor)';
+    element.style.transform = 'translate3d(${to.x}px, ${to.y}px, 0) scale($scaleFactor)';
   }
 
   void out() {
     element.classes.add('out');
-    element.style.transform = 'translate(${to.x}px, ${to.y}px) scale(${scaleFactor + 0.3})';
+    element.style.transform = 'translate3d(${to.x}px, ${to.y}px, 0) scale(${scaleFactor + 0.3})';
   }
 }
 
