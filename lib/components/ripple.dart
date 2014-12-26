@@ -10,7 +10,7 @@ class RippleStyleSheet extends css.StyleSheet {
   build() => [
       css.rule('.Ripple', [
         css.position('absolute'),
-        css.transform('translate3d(0, 0, 0)'),
+        css.transform('translateZ(0)'),
         css.top(0),
         css.left(0),
         css.right(0),
@@ -101,7 +101,7 @@ class Ripple {
     final html.DivElement t = e.target;
     if (t.classes.contains('out')) {
       if (e.propertyName == 'opacity') {
-        domScheduler.nextFrame.write(0).then((_) {
+        domScheduler.nextFrame.write().then((_) {
           t.remove();
         });
       }
@@ -128,7 +128,7 @@ class Ripple {
     _currentWave = new RippleWave(from, to, radius, fillColor);
     _bgElement.style.backgroundColor = fillColor;
 
-    domScheduler.nextFrame.write(0).then((_) {
+    domScheduler.nextFrame.write().then((_) {
       if (_currentWave == null) {
         return;
       }
@@ -138,7 +138,7 @@ class Ripple {
           return;
         }
         _currentWave.element.getComputedStyle().transform;
-        domScheduler.currentFrame.write(0).then((_) {
+        domScheduler.currentFrame.write().then((_) {
           if (_currentWave == null) {
             return;
           }
