@@ -27,11 +27,9 @@ class ButtonStyleSheet extends css.StyleSheet {
         css.position('relative'),
         css.display('inline-block'),
         css.cursor('pointer'),
-        css.height(height),
-        css.minWidth(minWidth),
-        css.background(vars.buttonColor),
         css.touchAction('none'),
         css.userSelect('none'),
+        css.background(vars.buttonColor),
         css.color(vars.buttonTextColor),
         Typography.button(),
 
@@ -39,16 +37,22 @@ class ButtonStyleSheet extends css.StyleSheet {
           css.cursor('default')
         ]),
 
+        css.rule(['&.flat', '&.raised'], [
+          css.height(height),
+          css.minWidth(minWidth),
+          css.padding('0 ${Layout.gridSize}')
+        ]),
+
         css.rule('&.fab', [
           css.height(fabSize),
-          css.minWidth(fabSize),
+          css.width(fabSize),
           css.background(vars.colorAccent.colors[Palette.P500]),
           css.color(white),
           css.padding(Layout.gridSize * 2)
         ]),
 
-        css.rule(['&.flat', '&.raised'], [
-          css.padding('0 ${Layout.gridSize}')
+        css.rule('&.icon', [
+          css.padding(Layout.gridSize),
         ])
       ]),
 
@@ -232,7 +236,7 @@ abstract class InkButton extends Button {
 }
 
 final flatButton = v.componentFactory(FlatButton);
-class FlatButton extends Button {
+class FlatButton extends ButtonBase {
   FlatButton({bool disabled: false, int zDepth: 0})
       : super(disabled: disabled, zDepth: zDepth);
 
@@ -339,4 +343,26 @@ class FabInk extends InkButton {
     zDepth -= 1;
     invalidate();
   }
+}
+
+final iconButtonInk = v.componentFactory(IconButtonInk);
+class IconButtonInk extends InkButton {
+  @property(required: true)
+  css.SvgIcon icon;
+
+  IconButtonInk({this.icon, bool disabled: false, int zDepth: 0})
+      : super(disabled: disabled, zDepth: zDepth);
+
+  void create() {
+    super.create();
+    element.classes
+      ..add('icon')
+      ..add('circle');
+  }
+
+  build() => super.build().decorate(
+      v.root()(
+        mui.icon(icon)
+      )
+    );
 }

@@ -14,7 +14,7 @@ class ApplicationStyleSheet extends css.StyleSheet {
                    mui.Button.css,
                    mui.Icon.css];
 
-  final icons = [mui.iconComment];
+  final icons = [mui.iconComment, mui.iconMenu];
 
   build() => [
       css.rule(['.paper-examples .mui-paper'], [
@@ -49,7 +49,8 @@ class Application extends Component {
     return v.root(type: 'container')([
       mui.flatInkButton(type: 'flat1')(v.div()('Subject Title')),
       mui.raisedInkButton(type: 'raised1')(v.div()('Subject Title')),
-      mui.fabInk(icon: mui.iconComment, type: 'fab1')
+      mui.fabInk(icon: mui.iconComment, type: 'fab1'),
+      mui.iconButtonInk(icon: mui.iconMenu, type: 'icon1')
     ]);
   }
 }
