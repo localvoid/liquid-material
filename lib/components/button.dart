@@ -26,14 +26,12 @@ class ButtonStyleSheet extends css.StyleSheet {
       css.rule('.Button', [
         css.position('relative'),
         css.display('inline-block'),
-//        css.justifyContent('center'),
         css.cursor('pointer'),
         css.height(height),
         css.minWidth(minWidth),
         css.background(vars.buttonColor),
         css.touchAction('none'),
         css.userSelect('none'),
-        css.textAlign('center'),
         css.color(vars.buttonTextColor),
         Typography.button(),
 
@@ -41,18 +39,17 @@ class ButtonStyleSheet extends css.StyleSheet {
           css.cursor('default')
         ]),
 
-
         css.rule('&.fab', [
           css.height(fabSize),
           css.minWidth(fabSize),
-          css.borderRadius('50%'),
           css.background(vars.colorAccent.colors[Palette.P500]),
           css.color(white),
-
-          css.rule('.Icon', [
-            css.margin('0 auto')
-          ])
+          css.padding(Layout.gridSize * 2)
         ]),
+
+        css.rule(['&.flat', '&.raised'], [
+          css.padding('0 ${Layout.gridSize}')
+        ])
       ]),
 
       css.rule('.Button_content', [
@@ -60,7 +57,7 @@ class ButtonStyleSheet extends css.StyleSheet {
         css.height('100%'),
         css.display('flex'),
         css.alignItems('center'),
-        css.padding('0 ${Layout.gridSize}')
+        css.justifyContent('center')
       ]),
 
 
