@@ -1,14 +1,16 @@
 library liquid_material.button;
 
+import 'dart:async';
 import 'dart:html' as html;
 import 'package:liquid/vdom.dart' as v;
 import 'package:liquid/liquid.dart';
 import 'package:vcss/vcss.dart' as css;
+
+import 'paper.dart';
+import 'ripple.dart';
 import '../layout.dart';
 import '../typography.dart';
 import '../vars.dart' as vars;
-import 'paper.dart';
-import 'ripple.dart';
 
 class ButtonStyleSheet extends css.StyleSheet {
   static const height = const css.Size.px(36);
@@ -27,6 +29,11 @@ class ButtonStyleSheet extends css.StyleSheet {
         css.minWidth(minWidth),
         css.background(vars.buttonColor),
         css.overflow('hidden'),
+        css.touchAction('none'),
+        css.userSelect('none'),
+        css.textAlign('center'),
+        css.color(vars.buttonTextColor),
+        Typography.button(),
 
         css.rule('&.disabled', [
           css.cursor('default')
@@ -34,20 +41,16 @@ class ButtonStyleSheet extends css.StyleSheet {
       ]),
 
       css.rule('.Button_content', [
-        css.height('100%'),
-        css.userSelect('none'),
         css.position('relative'),
+        css.height('100%'),
         css.display('flex'),
         css.alignItems('center'),
-        css.padding('0 ${Layout.gridSize}'),
-        css.textAlign('center'),
-        css.color(vars.buttonTextColor),
-        Typography.button()
+        css.padding('0 ${Layout.gridSize}')
       ])
     ];
 }
 
-abstract class Button extends Paper {
+abstract class ButtonBase extends Paper {
   static final css = new ButtonStyleSheet();
 
   @property()
@@ -57,8 +60,11 @@ abstract class Button extends Paper {
 
   html.DivElement get container => content;
 
-  Button({this.disabled: false, int zDepth: 0})
-      : super(zDepth: zDepth);
+  ButtonBase({this.disabled: false, int zDepth: 0})
+      : super(zDepth: zDepth) {
+    assert(disabled != null);
+    assert(zDepth != null);
+  }
 
   void create() {
     super.create();
@@ -72,38 +78,137 @@ abstract class Button extends Paper {
 
   v.VRootDecorator<html.DivElement> build() =>
       super.build().decorate(
-          v.rootDecorator(classes: disabled == true ? ['mui-disabled'] : null)
+          v.rootDecorator(classes: disabled == true ? const ['disabled'] : null)
       );
 }
 
+abstract class Button extends ButtonBase {
+  static final css = ButtonBase.css;
+
+  bool _down = false;
+  List<StreamSubscription> _downSubs;
+
+  Button({bool disabled: false, int zDepth: 0})
+      : super(disabled: disabled, zDepth: zDepth);
+
+  void init() {
+    element
+      ..onTouchStart.listen(_handleDown)
+      ..onMouseDown.listen(_handleDown);
+  }
+
+  void detached() {
+    if (_downSubs != null) {
+      _cancelDownSubs();
+    }
+  }
+
+  void _handleDown(html.Event e) {
+    if (_down || disabled) {
+      return;
+    }
+    handleDown(e);
+  }
+
+  void handleDown(html.Event e) {
+    _down = true;
+
+    if (e is html.TouchEvent) {
+      _downSubs = [
+        html.document.onTouchMove.listen(_handleMove),
+        html.document.onTouchEnd.listen(_handleUp),
+        html.document.onTouchCancel.listen(_handleCancel)
+      ];
+
+    } else if (e is html.MouseEvent) {
+      _downSubs = [
+        html.document.onMouseMove.listen(_handleMove),
+        html.document.onMouseUp.listen(_handleUp)
+      ];
+    }
+  }
+
+  void _handleMove(html.Event e) {
+    if (!_down) {
+      return;
+    }
+    handleMove(e);
+  }
+
+  void handleMove(html.Event e) {
+    if (e is html.TouchEvent) {
+      if (!element.offset.containsPoint(e.targetTouches[0].client)) {
+        handleUp(e);
+      }
+    } else if (e is html.MouseEvent) {
+      if (!element.offset.containsPoint(e.client)) {
+        handleUp(e);
+      }
+    }
+  }
+
+  void _handleUp(html.Event e) {
+    if (!_down) {
+      return;
+    }
+    handleUp(e);
+  }
+
+  void handleUp(html.Event e) {
+    _down = false;
+    _cancelDownSubs();
+  }
+
+  void _handleCancel(html.TouchEvent e) {
+    if (!_down) {
+      return;
+    }
+    handleUp(e);
+  }
+
+  void _cancelDownSubs() {
+    for (final sub in _downSubs) {
+      sub.cancel();
+    }
+    _downSubs = null;
+  }
+}
+
 abstract class InkButton extends Button {
+  static final css = Button.css;
+
   Ripple _ripple;
 
   InkButton({bool disabled: false, int zDepth: 0})
       : super(disabled: disabled, zDepth: zDepth);
 
-  void create() {
-    super.create();
-  }
+  void handleDown(html.Event e) {
+    super.handleDown(e);
 
-  void init() {
-    element.onMouseDown.listen(handleMouseDown);
-    element.onMouseUp.listen(handleMouseUp);
-  }
-
-  void handleMouseDown(html.MouseEvent e) {
     // lazy ripple render to improve initial render performance
     if (_ripple == null) {
-      _ripple = new Ripple(element);
+      _ripple = new Ripple(element, backgroundFill: true, recentering: true);
       domScheduler.nextFrame.write(depth).then(_insertRipple);
     }
 
-    _ripple.touchDown(e);
+    num x = 0;
+    num y = 0;
+    if (e is html.TouchEvent) {
+      x = e.targetTouches[0].client.x;
+      y = e.targetTouches[0].client.y;
+    } else if (e is html.MouseEvent) {
+      x = e.client.x;
+      y = e.client.y;
+    }
+
+    _ripple.touch(x, y);
   }
 
-  void handleMouseUp(html.MouseEvent ev) {
+  void handleUp(html.Event e) {
+    super.handleUp(e);
+
     if (_ripple != null) {
-      _ripple.touchUp();
+      _ripple.cancel();
     }
   }
 
@@ -114,61 +219,50 @@ abstract class InkButton extends Button {
 
 final flatButton = v.componentFactory(FlatButton);
 class FlatButton extends Button {
-  FlatButton({bool disabled, int zDepth: 0})
+  FlatButton({bool disabled: false, int zDepth: 0})
       : super(disabled: disabled, zDepth: zDepth);
 
   void create() {
     super.create();
-    element.classes.add('flat');
+    element.classes
+      ..add('flat')
+      ..add('round');
   }
 }
 
 final flatInkButton = v.componentFactory(FlatInkButton);
 class FlatInkButton extends InkButton {
-  FlatInkButton({bool disabled, int zDepth: 0})
+  FlatInkButton({bool disabled: false, int zDepth: 0})
       : super(disabled: disabled, zDepth: zDepth);
 
   void create() {
     super.create();
-    element.classes.add('flat');
+    element.classes
+      ..add('flat')
+      ..add('round');
   }
 }
-
-final fabButton = v.componentFactory(FabButton);
-class FabButton extends Button {
-  FabButton({bool disabled, int zDepth: 1})
-      : super(disabled: disabled, zDepth: zDepth);
-
-  void create() {
-    super.create();
-    element.classes.add('fab');
-  }
-}
-
 
 final raisedButton = v.componentFactory(RaisedButton);
 class RaisedButton extends Button {
-  RaisedButton({bool disabled, int zDepth: 1})
+  RaisedButton({bool disabled: false, int zDepth: 1})
       : super(disabled: disabled, zDepth: zDepth);
 
   void create() {
     super.create();
-    element.classes.add('raised');
+    element.classes
+      ..add('raised')
+      ..add('round');
   }
 
-  void init() {
-    super.init();
-    element
-      ..onMouseDown.listen(handleMouseDown)
-      ..onMouseUp.listen(handleMouseUp);
-  }
-
-  void handleMouseDown(html.MouseEvent e) {
+  void handleDown(html.Event e) {
+    super.handleDown(e);
     zDepth += 1;
     invalidate();
   }
 
-  void handleMouseUp(html.MouseEvent e) {
+  void handleUp(html.Event e) {
+    super.handleUp(e);
     zDepth -= 1;
     invalidate();
   }
@@ -176,22 +270,24 @@ class RaisedButton extends Button {
 
 final raisedInkButton = v.componentFactory(RaisedInkButton);
 class RaisedInkButton extends InkButton {
-  RaisedInkButton({bool disabled, int zDepth: 1})
+  RaisedInkButton({bool disabled: false, int zDepth: 1})
       : super(disabled: disabled, zDepth: zDepth);
 
   void create() {
     super.create();
-    element.classes.add('raised');
+    element.classes
+      ..add('raised')
+      ..add('round');
   }
 
-  void handleMouseDown(html.MouseEvent e) {
-    super.handleMouseDown(e);
+  void handleDown(html.MouseEvent e) {
+    super.handleDown(e);
     zDepth += 1;
     invalidate();
   }
 
-  void handleMouseUp(html.MouseEvent e) {
-    super.handleMouseUp(e);
+  void handleUp(html.MouseEvent e) {
+    super.handleUp(e);
     zDepth -= 1;
     invalidate();
   }

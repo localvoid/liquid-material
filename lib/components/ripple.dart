@@ -18,14 +18,14 @@ class RippleStyleSheet extends css.StyleSheet {
         css.borderRadius('inherit')
       ]),
 
-      css.rule(['.Ripple_fill'], [
+      css.rule(['.Ripple_bg'], [
         css.position('absolute'),
         css.top(0),
         css.left(0),
         css.right(0),
         css.bottom(0),
+        css.opacity(0),
         css.transition('opacity 1.1s $swiftEaseInOut'),
-        css.opacity(0)
       ]),
 
       css.rule('.Ripple_wave', [
@@ -35,7 +35,6 @@ class RippleStyleSheet extends css.StyleSheet {
         css.top('-50px'),
         css.width('100px'),
         css.height('100px'),
-        css.overflow('hidden'),
         css.transition('opacity 0.4s $swiftEaseIn, transform 0.6s $swiftEaseOut'),
         css.opacity(0.25),
 
@@ -46,17 +45,10 @@ class RippleStyleSheet extends css.StyleSheet {
     ];
 }
 
-class Position {
-  final num x;
-  final num y;
-
-  const Position(this.x, this.y);
-}
-
 class RippleWave {
   final html.DivElement element = new html.DivElement();
-  final Position from;
-  final Position to;
+  final math.Point from;
+  final math.Point to;
   final num radius;
   final double scaleFactor;
 
@@ -83,23 +75,24 @@ class Ripple {
   static final css = new RippleStyleSheet();
 
   final html.DivElement element = new html.DivElement();
-  final html.DivElement _fillElement = new html.DivElement();
+  html.DivElement _bgElement;
   html.Element container;
 
   final String color;
-  final bool fill;
+  final bool backgroundFill;
   final bool recentering;
 
   RippleWave _currentWave;
   bool _active = false;
 
-  Ripple(this.container, {this.color, this.fill: true, this.recentering: true}) {
+  Ripple(this.container, {this.color, this.backgroundFill: true, this.recentering: true}) {
     element.classes.add('Ripple');
     element.onTransitionEnd.listen(_handleTransitionEnd);
 
-    if (fill) {
-      _fillElement.classes.add('Ripple_fill');
-      element.append(_fillElement);
+    if (backgroundFill) {
+      _bgElement = new html.DivElement()
+        ..classes.add('Ripple_bg');
+      element.append(_bgElement);
     }
   }
 
@@ -114,7 +107,7 @@ class Ripple {
     }
   }
 
-  void touchDown(html.MouseEvent e) {
+  void touch(num x, num y) {
     if (_currentWave != null) {
       return;
     }
@@ -128,28 +121,39 @@ class Ripple {
 
     final w = container.offsetWidth;
     final h = container.offsetHeight;
-    final x = e.client.x - container.offsetLeft;
-    final y = e.client.y - container.offsetTop;
-    final from = new Position(x, y);
-    final to = recentering ? new Position(w / 2, h / 2) : from;
+    final from = new math.Point(x - container.offsetLeft, y - container.offsetTop);
+    final to = recentering ? new math.Point(w / 2, h / 2) : from;
     final radius = math.sqrt((w * w) + (h * h));
     _currentWave = new RippleWave(from, to, radius, fillColor);
-    _fillElement.style.backgroundColor = fillColor;
+    _bgElement.style.backgroundColor = fillColor;
 
     domScheduler.nextFrame.write(0).then((_) {
+      if (_currentWave == null) {
+        return;
+      }
       element.append(_currentWave.element);
       domScheduler.currentFrame.read().then((_) {
+        if (_currentWave == null) {
+          return;
+        }
         _currentWave.element.getComputedStyle().transform;
         domScheduler.currentFrame.write(0).then((_) {
+          if (_currentWave == null) {
+            return;
+          }
           _currentWave.update();
-          _fillElement.style.opacity = '0.25';
+          if (_bgElement != null) {
+            _bgElement.style.opacity = '0.25';
+          }
         });
       });
     });
   }
 
-  void touchUp() {
-    _fillElement.style.opacity = null;
+  void cancel() {
+    if (_bgElement != null) {
+      _bgElement.style.opacity = null;
+    }
     if (_currentWave != null) {
       _currentWave.out();
       _currentWave = null;

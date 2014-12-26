@@ -9,7 +9,14 @@ import '../style.dart';
 class PaperStyleSheet extends css.StyleSheet {
   build() => [
       css.rule('.Paper', [
-        css.transition('box-shadow 0.5s $swiftEaseInOut')
+        css.transition('box-shadow 0.5s $swiftEaseInOut'),
+        css.rule('&.round', [
+          css.borderRadius('2px')
+        ]),
+
+        css.rule('&.circle', [
+          css.borderRadius('50%')
+        ])
       ]),
 
       css.rule('.z1', [
@@ -30,14 +37,6 @@ class PaperStyleSheet extends css.StyleSheet {
 
       css.rule('.z5', [
         paperShadow(5)
-      ]),
-
-      css.rule('&.round', [
-        css.borderRadius('2px')
-      ]),
-
-      css.rule('&.circle', [
-        css.borderRadius('50%')
       ])
     ];
 }

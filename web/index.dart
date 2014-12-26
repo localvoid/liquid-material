@@ -26,6 +26,11 @@ class ApplicationStyleSheet extends css.StyleSheet {
       css.rule('.paper-examples-group', [
         css.display('inline-block'),
         css.margin('0 32px')
+      ]),
+
+      css.rule('.raised1', [
+        css.background(mui.paletteBlue.colors[mui.Palette.P500]),
+        css.color(mui.white)
       ])
     ];
 }
@@ -37,8 +42,8 @@ class Application extends Component {
 
   build() {
     return v.root()([
-      mui.flatInkButton()(v.div()('Subject Title')),
-      mui.raisedInkButton()(v.div()('Subject Title')),
+      mui.flatInkButton(type: 'flat1')(v.div()('Subject Title')),
+      mui.raisedInkButton(type: 'raised1')(v.div()('Subject Title')),
     ]);
   }
 }
