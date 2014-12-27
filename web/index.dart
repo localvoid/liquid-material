@@ -13,7 +13,8 @@ class ApplicationStyleSheet extends css.StyleSheet {
   final require = [mui.MainStyleSheet.instance,
                    mui.Button.css,
                    mui.Icon.css,
-                   mui.RadioButton.css];
+                   mui.RadioButton.css,
+                   mui.CheckBox.css];
 
   final icons = [mui.iconComment, mui.iconMenu];
 
@@ -52,7 +53,8 @@ class Application extends Component {
       mui.raisedInkButton(type: 'raised1')(v.div()('Subject Title')),
       mui.fabInk(icon: mui.iconComment, type: 'fab1'),
       mui.iconButtonInk(icon: mui.iconMenu, type: 'icon1'),
-      mui.radioButton(type: 'radio1')
+      mui.radioButton(type: 'radio1'),
+      mui.checkBox(type: 'checkBox1')
     ]);
   }
 }
