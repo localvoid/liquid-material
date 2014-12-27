@@ -24,7 +24,6 @@ class ButtonStyleSheet extends css.StyleSheet {
 
   build() => [
       css.rule('.Button', [
-        css.position('relative'),
         css.display('inline-block'),
         css.cursor('pointer'),
         css.touchAction('none'),
@@ -63,8 +62,6 @@ class ButtonStyleSheet extends css.StyleSheet {
         css.alignItems('center'),
         css.justifyContent('center')
       ]),
-
-
     ];
 }
 

@@ -7,3 +7,4 @@ export 'components/paper.dart';
 export 'components/ripple.dart';
 export 'components/icon.dart';
 export 'components/button.dart';
+export 'components/radio_button.dart';
