@@ -7,16 +7,23 @@ import 'package:vcss/vcss.dart' as css;
 import 'button.dart';
 import '../layout.dart';
 import '../style.dart';
+import '../colors.dart';
 
 class RadioButtonStyleSheet extends css.StyleSheet {
   static const size = const css.Size.px(48);
   static const radioSize = const css.Size.px(16);
+  static final color = paletteGreen.colors[Palette.P700];
 
   build() => [
       css.rule('.RadioButton', [
         css.width(size),
         css.height(size),
-        css.padding(Layout.gridSize * 2)
+        css.padding(Layout.gridSize * 2),
+        css.color(color),
+
+        css.rule('&.checked', [
+          css.color(black),
+        ])
       ]),
 
       css.rule('.RadioButton_off', [
@@ -35,7 +42,7 @@ class RadioButtonStyleSheet extends css.StyleSheet {
         css.left(0),
         css.width(radioSize),
         css.height(radioSize),
-        css.background('#0f9d58'),
+        css.background(color),
         css.borderRadius('50%'),
         css.transform('scale(0)'),
         css.transition('transform 0.28s $swiftEaseInOut'),
