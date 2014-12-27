@@ -16,7 +16,8 @@ class RippleStyleSheet extends css.StyleSheet {
         css.right(0),
         css.bottom(0),
         css.overflow('hidden'),
-        css.borderRadius('inherit')
+        css.borderRadius('inherit'),
+        css.pointerEvents('none')
       ]),
 
       css.rule(['.Ripple_bg'], [
