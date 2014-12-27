@@ -8,20 +8,13 @@ import '../style.dart';
 
 class PaperStyleSheet extends css.StyleSheet {
   build() => [
-      css.rule('.Paper_shadow', [
-        css.position('absolute'),
-        css.top(0),
-        css.left(0),
-        css.right(0),
-        css.bottom(0),
-        css.borderRadius('inherit'),
-        css.transition('box-shadow 0.5s $swiftEaseInOut'),
-      ]),
-
       css.rule('.Paper', [
+        css.position('relative'),
+
         css.rule('&.round', [
           css.borderRadius('3px')
         ]),
+
         css.rule('&.circle', [
           css.borderRadius('50%')
         ]),
@@ -45,6 +38,16 @@ class PaperStyleSheet extends css.StyleSheet {
         css.rule('&.z5 > .Paper_shadow', [
           paperShadow(5)
         ])
+      ]),
+
+      css.rule('.Paper_shadow', [
+        css.position('absolute'),
+        css.top(0),
+        css.right(0),
+        css.bottom(0),
+        css.left(0),
+        css.borderRadius('inherit'),
+        css.transition('box-shadow 0.5s $swiftEaseInOut'),
       ])
     ];
 }
@@ -63,7 +66,9 @@ abstract class Paper extends Component<html.DivElement> {
       ..classes.add('Paper');
 
     shadowElement.classes.add('Paper_shadow');
-    element.append(shadowElement);
+
+    element
+      ..append(shadowElement);
   }
 
   v.VRootDecorator<html.DivElement> build() =>
