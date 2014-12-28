@@ -23,32 +23,57 @@ class RadioButtonStyleSheet extends css.StyleSheet {
 
         css.rule('&.checked', [
           css.color(black),
-        ])
+        ]),
       ]),
 
-      css.rule('.RadioButton_off', [
+      css.rule('.RadioButton_c1', [
         css.position('absolute'),
         css.top(0),
         css.left(0),
         css.width(radioSize),
         css.height(radioSize),
         css.border('2px solid #5a5a5a'),
-        css.borderRadius('50%')
+        css.borderRadius('50%'),
+        css.transition('border-color 0.14s $swiftEaseOut 0.14s'),
+
+        css.rule('.RadioButton.checked &', [
+          css.borderColor(color),
+          css.transition('border-color 0.14s $swiftEaseIn 0.14s'),
+        ])
       ]),
 
-      css.rule('.RadioButton_on', [
+      css.rule('.RadioButton_c2', [
         css.position('absolute'),
         css.top(0),
         css.left(0),
         css.width(radioSize),
         css.height(radioSize),
-        css.background(color),
+        css.background('#5a5a5a'),
         css.borderRadius('50%'),
-        css.transform('scale(0)'),
-        css.transition('transform 0.28s $swiftEaseInOut'),
+        css.transform('scale(1)'),
+        css.transition('transform 0.28s $swiftEaseOut, background 0.14s $swiftEaseOut 0.14s'),
 
         css.rule('.RadioButton.checked &', [
-          css.transform('scale(1.125)')
+          css.transition('transform 0.28s $swiftEaseIn, background 0.14s $swiftEaseIn 0.14s'),
+          css.background(color),
+          css.transform('scale(0.5)')
+        ])
+      ]),
+
+      css.rule('.RadioButton_c3', [
+        css.position('absolute'),
+        css.top('2px'),
+        css.left('2px'),
+        css.width('12px'),
+        css.height('12px'),
+        css.background(white),
+        css.borderRadius('50%'),
+        css.transform('scale(1)'),
+        css.transition('transform 0.28s $swiftEaseIn'),
+
+        css.rule('.RadioButton.checked &', [
+          css.transition('transform 0.28s $swiftEaseOut'),
+          css.transform('scale(0)')
         ])
       ])
     ];
@@ -74,20 +99,34 @@ class RadioButton extends InkButton {
       ..add('circle');
 
 
-    final offElement = new html.DivElement()
-      ..classes.add('RadioButton_off');
+    final c1Element = new html.DivElement()
+      ..classes.add('RadioButton_c1');
 
-    final onElement = new html.DivElement()
-      ..classes.add('RadioButton_on');
+    final c2Element = new html.DivElement()
+      ..classes.add('RadioButton_c2');
+
+    final c3Element = new html.DivElement()
+      ..classes.add('RadioButton_c3');
 
     content
-      ..append(offElement)
-      ..append(onElement);
+      ..append(c1Element)
+      ..append(c2Element)
+      ..append(c3Element);
   }
 
   void init() {
     super.init();
     element.onClick.listen(_handleClick);
+  }
+
+  void handleDown(html.Event e) {
+    super.handleDown(e);
+    element.classes.add('down');
+  }
+
+  void handleUp(html.Event e) {
+    super.handleUp(e);
+    element.classes.remove('down');
   }
 
   void _handleClick(html.MouseEvent e) {
@@ -102,8 +141,10 @@ class RadioButton extends InkButton {
   }
 
   void toggle() {
-    checked = !checked;
-    invalidate();
+    if (toggles || !checked) {
+      checked = !checked;
+      invalidate();
+    }
   }
 
   v.VRootDecorator<html.DivElement> build() =>

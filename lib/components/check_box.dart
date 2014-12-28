@@ -22,53 +22,62 @@ class CheckBoxStyleSheet extends css.StyleSheet {
         css.color(color),
 
         css.rule('&.checked', [
-          css.color(black),
+          css.color(black)
         ])
       ]),
 
-      css.rule('.CheckBox_box', [
+      css.rule('.CheckBox_i1', [
         css.position('absolute'),
-        css.transform('scale(1)'),
         css.top(0),
         css.left(0),
-        css.width('18px'),
-        css.height('18px'),
+        css.width('16px'),
+        css.height('16px'),
         css.border('2px solid #777'),
         css.borderRadius('2px'),
-        css.transition('transform 0.2s $swiftEaseInOut'),
+        css.background('#777'),
+        css.transition('border-color 0.28s $swiftEaseIn 0.28s, background 0.28s $swiftEaseIn 0.28s'),
         css.rule('.CheckBox.checked &', [
-          css.transform('scale(0.8)'),
-          css.background('#777')
+          css.background(color),
+          css.borderColor(color)
         ])
       ]),
 
-      css.rule('.CheckBox_mark', [
+      css.rule('.CheckBox_i2', [
         css.position('absolute'),
-        css.transform('scale(0.01)'),
-        css.top(0),
-        css.left(0),
-        css.width('18px'),
-        css.height('18px'),
-        css.borderRadius('2px'),
-        css.background(color),
-        css.transition('transform 0.2s $swiftEaseInOut'),
-
-        css.rule('.CheckBox.checked &', [
-          css.transform('scale(1)')
-        ])
-      ]),
-
-      css.rule('.CheckBox_mark_icon', [
-        css.position('absolute'),
-        css.transform('rotate(45deg)'),
+        css.transform('scale(1)'),
         css.top('2px'),
-        css.left('6px'),
-        css.width('6px'),
+        css.left('2px'),
+        css.width('12px'),
         css.height('12px'),
+        css.borderRadius(0),
+        css.background('#fff'),
+        css.transition('border-radius 0.28s $swiftEaseIn 0.28s, transform 0.28s $swiftEaseOut 0.28s'),
+
+        css.rule('.CheckBox.checked &', [
+          css.transition('border-radius 0.28s $swiftEaseIn, transform 0.28s $swiftEaseIn'),
+          css.transform('scale(0)'),
+          css.borderRadius('50%'),
+        ])
+      ]),
+
+      // icon
+      css.rule('.CheckBox_i3', [
+        css.position('absolute'),
+        css.transform('translate(-2px, 5px) rotate(45deg) scale(0)'),
+        css.top('1px'),
+        css.left('5px'),
+        css.width('6px'),
+        css.height('11px'),
         css.border('2px solid #eee'),
         css.borderTopWidth(0),
         css.borderLeftWidth(0),
-      ])
+        css.transition('transform 0.28s $swiftEaseIn'),
+
+        css.rule('.CheckBox.checked &', [
+          css.transition('transform 0.28s $swiftEaseOut 0.28s'),
+          css.transform('translate(0, 0) rotate(45deg) scale(1)'),
+        ])
+      ]),
     ];
 }
 
@@ -88,20 +97,19 @@ class CheckBox extends InkButton {
       ..add('CheckBox')
       ..add('circle');
 
-    final boxElement = new html.DivElement()
-      ..classes.add('CheckBox_box');
+    final i1Element = new html.DivElement()
+      ..classes.add('CheckBox_i1');
 
-    final markElement = new html.DivElement()
-      ..classes.add('CheckBox_mark');
+    final i2Element = new html.DivElement()
+      ..classes.add('CheckBox_i2');
 
-    final markIcon = new html.DivElement()
-      ..classes.add('CheckBox_mark_icon');
-
-    markElement.append(markIcon);
+    final i3Element = new html.DivElement()
+      ..classes.add('CheckBox_i3');
 
     content
-      ..append(boxElement)
-      ..append(markElement);
+      ..append(i1Element)
+      ..append(i2Element)
+      ..append(i3Element);
   }
 
   void init() {

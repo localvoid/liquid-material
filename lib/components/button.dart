@@ -228,7 +228,7 @@ abstract class InkButton extends Button {
   }
 
   void _insertRipple(_) {
-    element.insertBefore(_ripple.element, content);
+    element.append(_ripple.element);
   }
 }
 
