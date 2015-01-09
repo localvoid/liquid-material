@@ -1,2 +1,1 @@
-# Material Design Liquid Components
-
+# Deprecated in favour of [InkWave](https://github.com/localvoid/inkwave)
