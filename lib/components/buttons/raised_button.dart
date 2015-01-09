@@ -17,6 +17,7 @@ class RaisedButtonStyleSheet extends v.StyleSheet {
 
   build(_) => [
       v.rule('.RaisedButton', [
+        RaisedButtonBase.style,
         Paper.roundStyle,
         v.height(height),
         v.minWidth(minWidth),

@@ -20,6 +20,7 @@ class FabStyleSheet extends v.StyleSheet {
 
   build(_) => [
       v.rule('.Fab', [
+        RaisedButtonBase.style,
         Paper.circleStyle,
         v.height(size),
         v.width(size),

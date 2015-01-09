@@ -17,6 +17,7 @@ class FlatButtonStyleSheet extends v.StyleSheet {
 
   build(_) => [
       v.rule('.FlatButton', [
+        ButtonBase.style,
         Paper.roundStyle,
         v.height(height),
         v.minWidth(minWidth),

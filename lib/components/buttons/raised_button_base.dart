@@ -6,8 +6,10 @@ import 'package:liquid/vdom.dart' as v;
 import 'button_base.dart';
 import '../../elements/paper.dart';
 
-class RaisedButtonBase extends ButtonBase {
+abstract class RaisedButtonBase extends ButtonBase {
   static const css = ButtonBase.css;
+
+  static List get style => ButtonBase.style;
 
   @property()
   int zDepth;

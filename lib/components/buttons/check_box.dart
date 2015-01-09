@@ -21,6 +21,7 @@ class CheckBoxStyleSheet extends v.StyleSheet {
 
   build(_) => [
       v.rule('.CheckBox', [
+        ButtonBase.style,
         Paper.circleStyle,
         v.width(size),
         v.height(size),

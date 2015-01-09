@@ -16,20 +16,6 @@ class ButtonBaseStyleSheet extends v.StyleSheet {
   const ButtonBaseStyleSheet();
 
   build(_) => [
-      v.rule('.Button', [
-        Paper.style,
-        v.display('inline-block'),
-        v.cursor('pointer'),
-        v.touchAction('none'),
-        v.userSelect('none'),
-        v.background(vars.buttonColor),
-        v.color(vars.buttonTextColor),
-
-        v.rule('&.disabled', [
-          v.cursor('default')
-        ]),
-      ]),
-
       v.rule('.Button_content', [
         v.position('relative'),
         v.height('100%'),
@@ -42,6 +28,20 @@ class ButtonBaseStyleSheet extends v.StyleSheet {
 
 abstract class ButtonBase extends Component<html.DivElement> {
   static const css = const ButtonBaseStyleSheet();
+
+  static List get style => [
+      Paper.style,
+      v.display('inline-block'),
+      v.cursor('pointer'),
+      v.touchAction('none'),
+      v.userSelect('none'),
+      v.background(vars.buttonColor),
+      v.color(vars.buttonTextColor),
+
+      v.rule('&.disabled', [
+        v.cursor('default')
+      ]),
+    ];
 
   @property()
   bool disabled;
@@ -64,7 +64,6 @@ abstract class ButtonBase extends Component<html.DivElement> {
 
   void create() {
     super.create();
-    element.classes.add('Button');
 
     content = new html.DivElement()
       ..classes.add('Button_content');

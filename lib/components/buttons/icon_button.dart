@@ -17,6 +17,7 @@ class IconButtonStyleSheet extends v.StyleSheet {
 
   build(_) => [
       v.rule('.IconButton', [
+        ButtonBase.style,
         Paper.circleStyle,
         v.padding(Layout.gridSize),
       ]),

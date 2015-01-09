@@ -21,6 +21,7 @@ class RadioButtonStyleSheet extends css.StyleSheet {
 
   build(_) => [
       css.rule('.RadioButton', [
+        ButtonBase.style,
         Paper.circleStyle,
         css.width(size),
         css.height(size),
