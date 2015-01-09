@@ -5,31 +5,26 @@ import 'package:liquid/vdom.dart' as v;
 import 'package:liquid_material/material.dart' as mui;
 import 'package:liquid_material/icons.dart' as mui;
 import 'package:vcss/browser.dart' as css;
-import 'src/pages.dart';
 
 class ApplicationStyleSheet extends css.StyleSheet {
-  static final instance = new ApplicationStyleSheet();
+  const ApplicationStyleSheet();
 
-  final require = [mui.MainStyleSheet.instance,
-                   mui.Button.css,
-                   mui.Icon.css,
-                   mui.RadioButton.css,
-                   mui.CheckBox.css];
+  static const instance = const ApplicationStyleSheet();
 
-  final icons = [mui.iconComment, mui.iconMenu];
+  final require = const [
+      mui.MainStyleSheet.instance,
+      mui.Icon.css,
+      mui.FlatButton.css,
+      mui.RaisedButton.css,
+      mui.IconButton.css,
+      mui.Fab.css,
+      mui.RadioButton.css,
+      mui.CheckBox.css
+    ];
 
-  build() => [
-      css.rule(['.paper-examples .mui-paper'], [
-        css.width('100px'),
-        css.height('100px'),
-        css.marginBottom('32px')
-      ]),
+  final icons = const [mui.iconComment, mui.iconMenu];
 
-      css.rule('.paper-examples-group', [
-        css.display('inline-block'),
-        css.margin('0 32px')
-      ]),
-
+  build(_) => [
       css.rule('.raised1', [
         css.background(mui.paletteBlue.colors[mui.Palette.P500]),
         css.color(mui.white),
@@ -49,10 +44,10 @@ class Application extends Component {
 
   build() {
     return v.root(type: 'container')([
-      mui.flatInkButton(type: 'flat1')(v.div()('Subject Title')),
-      mui.raisedInkButton(type: 'raised1')(v.div()('Subject Title')),
-      mui.fabInk(icon: mui.iconComment, type: 'fab1'),
-      mui.iconButtonInk(icon: mui.iconMenu, type: 'icon1'),
+      mui.flatButton(type: 'flat1')(v.div()('Subject Title')),
+      mui.raisedButton(type: 'raised1')(v.div()('Subject Title')),
+      mui.fab(icon: mui.iconComment, type: 'fab1'),
+      mui.iconButton(icon: mui.iconMenu, type: 'icon1'),
       mui.radioButton(type: 'radio1'),
       mui.checkBox(type: 'checkBox1')
     ]);

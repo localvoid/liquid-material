@@ -6,7 +6,6 @@ import 'package:liquid/vdom.dart' as v;
 import 'package:vcss/vcss.dart' as css;
 import '../layout.dart';
 import '../typography.dart';
-import '../vars.dart' as vars;
 
 const int alignTop = 0;
 const int alignBottom = 1;
@@ -23,6 +22,8 @@ String alignToString(int align) {
 }
 
 class ToolBarStyleSheet extends css.StyleSheet {
+  const ToolBarStyleSheet();
+
   /*
    * if (Layout.type & (Layout.xsScreen | Layout.landscape)) {
    *   height = 48;
@@ -34,7 +35,7 @@ class ToolBarStyleSheet extends css.StyleSheet {
    */
   static const rowHeight = const css.Size.px(64);
 
-  build() => [
+  build(_) => [
       css.rule('.ToolBar', [
         css.position('relative'),
         css.minHeight(rowHeight),
@@ -78,7 +79,7 @@ class ToolBarStyleSheet extends css.StyleSheet {
 
 final toolBar = v.componentFactory(ToolBar);
 class ToolBar extends Component {
-  static final css = new ToolBarStyleSheet();
+  static const css = const ToolBarStyleSheet();
 
   void create() {
     element = new html.DivElement()

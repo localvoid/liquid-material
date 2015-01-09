@@ -1,13 +1,15 @@
 library liquid_material.icon;
 
 import 'dart:svg' as svg;
-import 'package:vdom/vdom.dart' as vdom;
-import 'package:vcss/vcss.dart' as css;
+import 'package:vdom/vdom.dart' as v;
+import 'package:vcss/vcss.dart' as v;
 import '../colors.dart';
 
-class IconStyleSheet extends css.StyleSheet {
-  static const size = const css.Size.px(24);
-  static const bigSize = const css.Size.px(32);
+class IconStyleSheet extends v.StyleSheet {
+  const IconStyleSheet();
+
+  static const size = const v.Size.px(24);
+  static const bigSize = const v.Size.px(32);
 
   static num calcOpacity(int backgroundType, {bool active: true}) {
     if (backgroundType == Color.light) {
@@ -16,23 +18,23 @@ class IconStyleSheet extends css.StyleSheet {
     return active ? 1 : 0.3;
   }
 
-  build() =>
-      css.rule('.Icon', [
-        css.display('inline-block'),
-        css.height(size),
-        css.width(size),
-        css.verticalAlign('middle'),
-        css.backgroundRepeat('no-repeat'),
-        css.fill('currentcolor'),
+  build(_) =>
+      v.rule('.Icon', [
+        v.display('inline-block'),
+        v.height(size),
+        v.width(size),
+        v.verticalAlign('middle'),
+        v.backgroundRepeat('no-repeat'),
+        v.fill('currentcolor'),
 
-        css.rule('&.big', [
-          css.height(bigSize),
-          css.width(bigSize)
+        v.rule('&.big', [
+          v.height(bigSize),
+          v.width(bigSize)
         ])
       ]);
 }
 
-Icon icon(css.SvgIcon icon,
+Icon icon(v.SvgIcon icon,
           {Object key,
            String alt,
            String id,
@@ -50,10 +52,10 @@ Icon icon(css.SvgIcon icon,
       styles: styles);
 }
 
-class Icon extends vdom.VElement<svg.SvgSvgElement> {
-  static final css = new IconStyleSheet();
+class Icon extends v.VElement<svg.SvgSvgElement> {
+  static const css = const IconStyleSheet();
 
-  final css.SvgIcon icon;
+  final v.SvgIcon icon;
   final String alt;
   svg.UseElement _shapeRef;
 
@@ -74,11 +76,11 @@ class Icon extends vdom.VElement<svg.SvgSvgElement> {
            classes: classes,
            styles: styles);
 
-  void create(vdom.Context context) {
+  void create(v.Context context) {
     ref = new svg.SvgSvgElement();
   }
 
-  void render(vdom.Context context) {
+  void render(v.Context context) {
     super.render(context);
     ref
       ..classes.add('Icon')
@@ -96,7 +98,7 @@ class Icon extends vdom.VElement<svg.SvgSvgElement> {
     ref.append(_shapeRef);
   }
 
-  void update(Icon other, vdom.Context context) {
+  void update(Icon other, v.Context context) {
     super.update(other, context);
     other._shapeRef = _shapeRef;
 

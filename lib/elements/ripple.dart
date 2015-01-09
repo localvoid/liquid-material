@@ -1,47 +1,49 @@
-library liquid_material.ripple;
+library liquid_material.elements.ripple;
 
 import 'dart:math' as math;
 import 'dart:html' as html;
 import 'package:liquid/liquid.dart';
-import 'package:vcss/vcss.dart' as css;
+import 'package:vcss/vcss.dart' as v;
 import '../style.dart';
 
-class RippleStyleSheet extends css.StyleSheet {
-  build() => [
-      css.rule('.Ripple', [
-        css.position('absolute'),
-        css.transform('translateZ(0)'),
-        css.top(0),
-        css.left(0),
-        css.right(0),
-        css.bottom(0),
-        css.overflow('hidden'),
-        css.borderRadius('inherit'),
-        css.pointerEvents('none')
+class RippleStyleSheet extends v.StyleSheet {
+  const RippleStyleSheet();
+
+  build(_) => [
+      v.rule('.Ripple', [
+        v.position('absolute'),
+        v.transform('translateZ(0)'),
+        v.top(0),
+        v.left(0),
+        v.right(0),
+        v.bottom(0),
+        v.overflow('hidden'),
+        v.borderRadius('inherit'),
+        v.pointerEvents('none')
       ]),
 
-      css.rule(['.Ripple_bg'], [
-        css.position('absolute'),
-        css.top(0),
-        css.left(0),
-        css.right(0),
-        css.bottom(0),
-        css.opacity(0),
-        css.transition('opacity 1.1s $swiftEaseInOut'),
+      v.rule(['.Ripple_bg'], [
+        v.position('absolute'),
+        v.top(0),
+        v.left(0),
+        v.right(0),
+        v.bottom(0),
+        v.opacity(0),
+        v.transition('opacity 1.1s $swiftEaseInOut'),
       ]),
 
-      css.rule('.Ripple_wave', [
-        css.position('absolute'),
-        css.borderRadius('50%'),
-        css.left('-50px'),
-        css.top('-50px'),
-        css.width('100px'),
-        css.height('100px'),
-        css.transition('opacity 0.4s $swiftEaseIn, transform 0.6s $swiftEaseOut'),
-        css.opacity(0.25),
+      v.rule('.Ripple_wave', [
+        v.position('absolute'),
+        v.borderRadius('50%'),
+        v.left('-50px'),
+        v.top('-50px'),
+        v.width('100px'),
+        v.height('100px'),
+        v.transition('opacity 0.4s $swiftEaseIn, transform 0.6s $swiftEaseOut'),
+        v.opacity(0.25),
 
-        css.rule('&.out', [
-          css.opacity(0)
+        v.rule('&.out', [
+          v.opacity(0)
         ])
       ])
     ];
@@ -74,10 +76,11 @@ class RippleWave {
 }
 
 class Ripple {
-  static final css = new RippleStyleSheet();
+  static const css = const RippleStyleSheet();
 
   final html.DivElement element = new html.DivElement();
   html.DivElement _bgElement;
+
   html.Element container;
 
   final String color;

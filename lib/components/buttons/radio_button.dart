@@ -4,29 +4,35 @@ import 'dart:html' as html;
 import 'package:liquid/liquid.dart';
 import 'package:liquid/vdom.dart' as v;
 import 'package:vcss/vcss.dart' as css;
-import 'button.dart';
-import '../layout.dart';
-import '../style.dart';
-import '../colors.dart';
+import 'button_base.dart';
+import '../../elements/paper.dart';
+import '../../layout.dart';
+import '../../style.dart';
+import '../../colors.dart';
 
 class RadioButtonStyleSheet extends css.StyleSheet {
   static const size = const css.Size.px(48);
   static const radioSize = const css.Size.px(16);
   static final color = paletteGreen.colors[Palette.P700];
 
-  build() => [
+  const RadioButtonStyleSheet();
+
+  final require = const [ButtonBase.css];
+
+  build(_) => [
       css.rule('.RadioButton', [
+        Paper.circleStyle,
         css.width(size),
         css.height(size),
         css.padding(Layout.gridSize * 2),
-        css.color(color),
+        css.color(black),
 
         css.rule('&.checked', [
-          css.color(black),
+          css.color(color),
         ]),
       ]),
 
-      css.rule('.RadioButton_c1', [
+      css.rule('.RadioButton_l1', [
         css.position('absolute'),
         css.top(0),
         css.left(0),
@@ -42,7 +48,7 @@ class RadioButtonStyleSheet extends css.StyleSheet {
         ])
       ]),
 
-      css.rule('.RadioButton_c2', [
+      css.rule('.RadioButton_l2', [
         css.position('absolute'),
         css.top(0),
         css.left(0),
@@ -60,7 +66,7 @@ class RadioButtonStyleSheet extends css.StyleSheet {
         ])
       ]),
 
-      css.rule('.RadioButton_c3', [
+      css.rule('.RadioButton_l3', [
         css.position('absolute'),
         css.top('2px'),
         css.left('2px'),
@@ -80,8 +86,8 @@ class RadioButtonStyleSheet extends css.StyleSheet {
 }
 
 final radioButton = v.componentFactory(RadioButton);
-class RadioButton extends InkButton {
-  static final css = new RadioButtonStyleSheet();
+class RadioButton extends ButtonBase {
+  static const css = const RadioButtonStyleSheet();
 
   @property()
   bool checked;
@@ -89,29 +95,17 @@ class RadioButton extends InkButton {
   @property(immutable: true)
   bool toggles;
 
-  RadioButton({this.checked: false, this.toggles: true, bool disabled: false})
-    : super(disabled: disabled);
+  RadioButton({this.checked: false, this.toggles: true, bool disabled: false, bool noink: false})
+    : super(disabled: disabled, noink: noink);
 
   void create() {
     super.create();
-    element.classes
-      ..add('RadioButton')
-      ..add('circle');
-
-
-    final c1Element = new html.DivElement()
-      ..classes.add('RadioButton_c1');
-
-    final c2Element = new html.DivElement()
-      ..classes.add('RadioButton_c2');
-
-    final c3Element = new html.DivElement()
-      ..classes.add('RadioButton_c3');
+    element.classes.add('RadioButton');
 
     content
-      ..append(c1Element)
-      ..append(c2Element)
-      ..append(c3Element);
+      ..append(new html.DivElement()..classes.add('RadioButton_l1'))
+      ..append(new html.DivElement()..classes.add('RadioButton_l2'))
+      ..append(new html.DivElement()..classes.add('RadioButton_l3'));
   }
 
   void init() {
